@@ -9,7 +9,6 @@
   :root{ --bg:#ffffff; --ink:#111111; --muted:#777; --line:#eaeaea; --accent:#FF9F1C; --topbar-h:72px; --danger:#d60000; --pill:#f1f1f1; }
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink)}
-  /* Fix universal para hidden */
   [hidden]{ display:none !important; }
 
   /* ===== TOPBAR ===== */
@@ -47,7 +46,7 @@
 
   /* ===== NAV DESKTOP ===== */
   .navwrap{position:sticky; top:var(--topbar-h); z-index:50; background:#fff; border-bottom:1px solid var(--line); display:flex; justify-content:center}
-  nav{display:flex; gap:28px; padding:14px 20px; max-width:1200px; margin:0 auto;} /* ancho cómodo */
+  nav{display:flex; gap:28px; padding:14px 20px; max-width:1200px; margin:0 auto;}
   nav>.nav-item{position:relative; padding-bottom:10px}
   nav>.nav-item>button{background:none;border:none;cursor:pointer;font-weight:700;font-size:15px;color:var(--ink);padding:8px 10px;border-radius:8px;transition:.15s}
   nav>.nav-item>button:hover{color:var(--accent);background:rgba(255,159,28,.10)}
@@ -81,16 +80,31 @@
   }
   @media (max-width:480px){ .s-toggle span:last-child{display:none} .brand{font-size:18px} }
 
-  /* ===== GRID ===== */
+  /* ===== GRID (REESCRITA A 2/3/4 COLUMNAS) ===== */
   .producto-grid{padding:50px 4%; max-width:1200px; margin:0 auto;}
   .producto-grid h3{text-align:center;font-size:30px;font-weight:900;margin-bottom:22px}
-  .producto-lista{display:grid;gap:24px;grid-template-columns:repeat(4,1fr)}
+
+  /* 2 columnas por defecto (móvil) */
+  .producto-lista{
+    display:grid;
+    gap:16px;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+  }
+  /* 3 columnas en tablet */
+  @media (min-width:768px){
+    .producto-lista{ gap:20px; grid-template-columns:repeat(3, minmax(0,1fr)); }
+  }
+  /* 4 columnas en desktop */
+  @media (min-width:1100px){
+    .producto-lista{ gap:22px; grid-template-columns:repeat(4, minmax(0,1fr)); }
+  }
+
   .producto{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.25s;cursor:pointer; position:relative}
-  .producto:hover{transform:scale(1.02);box-shadow:0 12px 26px rgba(0,0,0,.12)}
-  /* Youngla-style: ratio 3:4 */
-  .producto img{width:100%; aspect-ratio:3/4; height:auto; object-fit:cover; display:block}
+  .producto:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,0,0,.12)}
+  /* Youngla-style: proporción 4:5 */
+  .producto img{width:100%; aspect-ratio:4/5; height:auto; object-fit:cover; display:block}
   .p-info{padding:14px 16px}
-  .p-titulo{font-weight:800;font-size:16px; line-height:1.25}
+  .p-titulo{font-weight:800;font-size:14px; line-height:1.25}
   .variantes{display:flex;gap:8px;margin-top:12px}
   .var{width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid #fff;outline:1px solid #ccc;transition:transform .1s;position:relative}
   .var:hover{transform:scale(1.2)} .var.selected{outline:2px solid #111}
@@ -106,7 +120,6 @@
   :is(.card, .producto).agotado .agotado-badge{display:inline-block}
   :is(.card, .producto).agotado{pointer-events:none; cursor:not-allowed}
 
-  /* Marca visual si una card es favorita */
   .producto.fav::after{
     content:"★"; position:absolute; top:10px; right:12px;
     font-weight:900; font-size:18px; color:#FFB703; text-shadow:0 1px 0 #0003;
@@ -131,28 +144,15 @@
   .panel a:hover{background:#1b1b1b;color:#fff}
   .no-scroll{overflow:hidden}
 
-  @media (max-width:1180px){ .producto-lista{grid-template-columns:repeat(3,1fr)} }
-  @media (max-width:980px){
-    .hamburger{display:block}
-    .brand{font-size:20px}
-    .navwrap{display:none}
-    .producto-lista{grid-template-columns:repeat(2,1fr)}
-  }
-  @media (max-width:560px){
-    .producto-lista{grid-template-columns:1fr}
-  }
-
   /* ===== PDP (PÁGINA DE PRODUCTO) ===== */
   .pdp{display:none; padding:28px 5%; max-width:1200px; margin:0 auto;}
   .pdp.show{display:block}
   .pdp-grid{display:grid; grid-template-columns:1.2fr .8fr; gap:28px}
   @media (max-width:980px){ .pdp-grid{grid-template-columns:1fr} }
 
-  /* Galería */
   .pdp-gallery{display:grid; grid-template-columns:120px 1fr; gap:14px; align-items:start}
   @media (max-width:560px){ .pdp-gallery{grid-template-columns:1fr} }
 
-  /* ===== IMAGEN PRINCIPAL ===== */
   .pdp-main{
     width:100%;
     background:#fff;
@@ -163,7 +163,6 @@
   }
   .pdp-main img{ width:70%; height:auto; object-fit:contain }
 
-  /* ===== THUMBS ===== */
   .pdp-thumbs{ display:flex; flex-direction:column; gap:12px; padding-right:8px }
   .pdp-thumb{
     width:86px; aspect-ratio:1/1; border:1px solid var(--line); border-radius:12px;
@@ -190,7 +189,6 @@
   .btn-buy:hover{filter:brightness(.95)}
   .btn-outline{background:#fff}
 
-  /* Barra sticky en mobile */
   .pdp-sticky{display:none}
   @media (max-width:680px){
     .pdp-sticky{
@@ -203,10 +201,8 @@
     .pdp-sticky .btn-buy{padding:12px 18px}
   }
 
-  /* ===== FRANJA NEGRA INFERIOR ===== */
   .bottom-strip{position:fixed; left:0; right:0; bottom:0; height:10px; background:#000; z-index:10}
 
-  /* Mensaje de vacíos (favoritos) */
   .empty-favs{
     grid-column:1/-1;
     padding:40px;
@@ -386,7 +382,6 @@
   <h3 id="gridTitle">Novedades</h3>
 
   <div class="producto-lista">
-
     <!-- ===== GYMSHARK ===== -->
     <div class="producto" data-brand="gymshark" data-wa="59170661091">
       <img src="g1.jpeg" data-img alt="Oversize Tee gris">
@@ -538,7 +533,6 @@
       </div>
     </div>
 
-    <!-- EL REGISTRO QUE PEDISTE -->
     <div class="producto" data-brand="youngla" data-wa="59170661091">
       <img src="supermangraphictees1.jpeg" data-img alt="Superman Graphic Tees - 4044">
       <div class="p-info">
@@ -565,11 +559,9 @@
       </div>
     </div>
 
-    <!-- Mensaje vacío Favoritos -->
     <div id="emptyFavs" class="empty-favs" hidden>
       Aún no tienes favoritos. Entra a un producto y pulsa “Añadir a favoritos”.
     </div>
-
   </div>
 </section>
 
@@ -584,7 +576,6 @@
   SPORT IMPORTS © 2025 — Todos los derechos reservados
 </footer>
 
-<!-- FRANJA NEGRA INFERIOR -->
 <div class="bottom-strip" aria-hidden="true"></div>
 
 <!-- CAROUSEL HERO -->
@@ -752,10 +743,10 @@ const productIndex = new Map();
 let autoId = 0;
 document.querySelectorAll('.producto').forEach(card=>{
   const title = card.querySelector('.p-titulo')?.textContent.trim() || 'Producto';
-  const brand = card.dataset.brand || '';
+  theBrand = card.dataset.brand || '';
   const img = card.querySelector('[data-img]')?.getAttribute('src') || '';
   const imgBase = img.split('/').pop()?.split('.')[0] || '';
-  const slug = slugify(`${title}-${brand}-${imgBase}-${autoId++}`);
+  const slug = slugify(`${title}-${theBrand}-${imgBase}-${autoId++}`);
   productIndex.set(slug, card);
   card.dataset.slug = slug;
 });
@@ -854,7 +845,6 @@ function renderPDPFromCard(card){
     </div>
   `;
 
-  // thumbs
   const thumbs = document.getElementById('pdpThumbs');
   const mainImg = document.getElementById('pdpMain');
   images.forEach((src)=>{
@@ -865,7 +855,6 @@ function renderPDPFromCard(card){
     thumbs.appendChild(t);
   });
 
-  // Colores
   const pdpColors = document.getElementById('pdpColors');
   const colorBtns = [];
   card.querySelectorAll('.var').forEach((v,idx)=>{
@@ -878,7 +867,6 @@ function renderPDPFromCard(card){
     colorBtns.push(b); pdpColors.appendChild(b);
   });
 
-  // Tallas
   const pdpSizes = document.getElementById('pdpSizes');
   const sizeBtns = [];
   const tallas=card.querySelectorAll('.talla');
@@ -916,7 +904,6 @@ function renderPDPFromCard(card){
   }
   document.getElementById('pdpBuy').addEventListener('click', openWA);
 
-  /* Favoritos en PDP (usa slug único) */
   const pdpFavBtn = document.getElementById('pdpFav');
   const currentSlug = card.dataset.slug;
   const isFav = (sl)=> getFavs().includes(sl);
@@ -935,7 +922,6 @@ function renderPDPFromCard(card){
 
   document.getElementById('backLink').addEventListener('click',(e)=>{ e.preventDefault(); history.back(); });
 
-  // Sticky
   stickyPrice.textContent = price;
   stickyBuy.onclick = openWA;
 
@@ -944,10 +930,10 @@ function renderPDPFromCard(card){
   hero.style.display='none';
   stickyBar.hidden = false;
   document.body.classList.add('has-sticky');
-  document.body.classList.add('in-pdp'); // padding inferior solo en PDP (móvil)
+  document.body.classList.add('in-pdp');
 }
 
-/* Router con rutas: "", "#/product/:slug", "#/favorites" */
+/* Router */
 function onRoute(){
   const favR = location.hash === '#/favorites';
   const prodM = location.hash.match(/^#\/product\/(.+)$/);
@@ -965,7 +951,6 @@ function onRoute(){
     return;
   }
 
-  // HOME
   pdp.classList.remove('show'); pdp.innerHTML='';
   showHome();
   closeDrawer();
@@ -973,7 +958,5 @@ function onRoute(){
 window.addEventListener('hashchange', onRoute);
 onRoute();
 </script>
-
-
 </body>
 </html>
