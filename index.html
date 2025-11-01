@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sport Imports</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root{ --bg:#ffffff; --ink:#111111; --muted:#777; --line:#eaeaea; --accent:#FF9F1C; --topbar-h:72px; --danger:#d60000; --pill:#f1f1f1; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink)}
+
+  /* ===== TOPBAR ===== */
+  .topbar{position:sticky; top:0; z-index:70; height:var(--topbar-h); background:var(--accent); display:flex; align-items:center; gap:14px; padding:0 16px; box-shadow:0 2px 0 rgba(0,0,0,.04)}
+  .brand{flex:0 0 auto; font-weight:900; letter-spacing:2px; font-size:24px; color:#111; text-transform:uppercase}
+  .hamburger{width:38px; height:32px; border:none; background:transparent; cursor:pointer; display:none}
+  .hamburger span{display:block;height:3px;background:#111;margin:6px 0;border-radius:2px;transition:.25s}
+
+  /* ===== SEARCH on TOPBAR ===== */
+  .searchwrap{margin-left:auto; position:relative}
+  .s-toggle{display:inline-flex; align-items:center; gap:8px; border:none; background:#0000; cursor:pointer; font-weight:800}
+  .s-toggle .loupe{width:22px; height:22px; display:inline-grid; place-items:center; border-radius:999px; background:#00000014}
+  .s-panel{position:absolute; right:0; top:calc(100% + 10px); width:min(640px,88vw); background:#fff; border:1px solid var(--line); border-radius:12px; box-shadow:0 14px 40px rgba(0,0,0,.18); padding:12px; display:none}
+  .s-panel.show{display:block}
+  .s-field{position:relative}
+  .s-input{width:100%; padding:12px 42px 12px 40px; border:1px solid var(--line); border-radius:10px; font:inherit}
+  .s-field .icon-loupe{position:absolute; left:10px; top:50%; transform:translateY(-50%); opacity:.6; font-weight:900}
+  .s-clear{position:absolute; right:8px; top:50%; transform:translateY(-50%); width:28px; height:28px; border-radius:999px; border:1px solid var(--line); background:#fff; cursor:pointer; font-weight:900; color:#666; display:none}
+  .s-input:not(:placeholder-shown) ~ .s-clear{display:inline-grid; place-items:center}
+
+  /* ===== BOTÓN FAVORITOS EN TOPBAR ===== */
+  .fav-btn{
+    margin-left:12px;
+    display:inline-flex; align-items:center; gap:8px;
+    background:#fff; color:#111; border:1px solid var(--line);
+    height:38px; padding:0 14px; border-radius:999px; font-weight:800;
+    cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,.06);
+  }
+  .fav-btn:hover{ filter:brightness(.98) }
+  .fav-count{
+    display:inline-grid; place-items:center;
+    min-width:22px; height:22px; padding:0 6px;
+    background:#111; color:#fff; border-radius:999px; font-size:12px; font-weight:900;
+  }
+
+  /* ===== NAV DESKTOP ===== */
+  .navwrap{position:sticky; top:var(--topbar-h); z-index:50; background:#fff; border-bottom:1px solid var(--line); display:flex; justify-content:center}
+  nav{display:flex; gap:28px; padding:14px 20px}
+  nav>.nav-item{position:relative; padding-bottom:10px}
+  nav>.nav-item>button{background:none;border:none;cursor:pointer;font-weight:700;font-size:15px;color:var(--ink);padding:8px 10px;border-radius:8px;transition:.15s}
+  nav>.nav-item>button:hover{color:var(--accent);background:rgba(255,159,28,.10)}
+  .mega{position:absolute; left:50%; transform:translateX(-50%); top:100%; background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 10px 30px rgba(0,0,0,.08); padding:22px; min-width:720px; display:none}
+  .nav-item.open .mega{display:block}
+  .mega-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .mega h4{font-size:13px;color:#999;text-transform:uppercase;margin-bottom:10px}
+  .mega a{display:block;color:var(--ink);text-decoration:none;padding:7px 8px;border-radius:8px;font-weight:600;font-size:14px}
+  .mega a:hover{background:var(--accent);color:#fff}
+
+  /* ===== HERO ===== */
+  .hero{position:relative;overflow:hidden}
+  .slides{display:flex;transition:transform .6s ease}
+  .slide{min-width:100vw;height:62vh;display:flex;align-items:center;justify-content:center;position:relative}
+  .slide::before{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.2))}
+  .slide img{width:100%;height:100%;object-fit:cover}
+  .cta{position:absolute;z-index:2;display:flex;flex-direction:column;align-items:center;gap:14px}
+  .cta h2{color:#fff;font-size:44px;font-weight:900;text-transform:uppercase;text-align:center}
+  .cta a{background:var(--accent);color:#fff;text-decoration:none;font-weight:800;border-radius:10px;padding:14px 28px;box-shadow:0 8px 18px rgba(255,159,28,.35)}
+  .h-arrow{position:absolute;top:50%;transform:translateY(-50%);background:#fff;border:none;border-radius:999px;padding:10px 14px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.15)}
+  .h-prev{left:16px}.h-next{right:16px}
+  .dots{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;display:flex;gap:8px;z-index:2}
+  .dot{width:9px;height:9px;border-radius:50%;background:#fff7;border:1px solid #fff;cursor:pointer}
+  .dot.active{background:#fff}
+
+  /* ===== GRID ===== */
+  .producto-grid{padding:50px 5%}
+  .producto-grid h3{text-align:center;font-size:30px;font-weight:900;margin-bottom:22px}
+  .producto-lista{display:grid;gap:24px;grid-template-columns:repeat(4,1fr)}
+  .producto{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.25s;cursor:pointer; position:relative}
+  .producto:hover{transform:scale(1.02);box-shadow:0 12px 26px rgba(0,0,0,.12)}
+  .producto img{width:100%;height:260px;object-fit:cover;display:block}
+  .p-info{padding:14px 16px}
+  .p-titulo{font-weight:700;font-size:17px}
+  .variantes{display:flex;gap:8px;margin-top:12px}
+  .var{width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid #fff;outline:1px solid #ccc;transition:transform .1s;position:relative}
+  .var:hover{transform:scale(1.2)} .var.selected{outline:2px solid #111}
+  .var.agotado{opacity:.4;pointer-events:none} .var.agotado::after{content:"✕"; position:absolute; inset:0; display:grid; place-items:center; color:var(--danger); font-weight:900; font-size:12px}
+  .tallas{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .talla{padding:6px 10px;border:1px solid #ccc;background:#fff;cursor:pointer;border-radius:8px;font-weight:700;font-size:13px}
+  .talla.selected{border-color:#111;box-shadow:0 0 0 2px #1112}
+  .talla.agotada{opacity:.35;pointer-events:none; position:relative}
+  .talla.agotada::after{content:"✕"; position:absolute; inset:0; display:grid; place-items:center; color:var(--danger); font-weight:900}
+
+  :is(.card, .producto).agotado img{filter:grayscale(100%) brightness(62%)}
+  :is(.card, .producto) .agotado-badge{position:absolute; top:12px; left:12px; background:var(--danger); color:#fff; font-weight:900; padding:6px 12px; border-radius:10px; font-size:13px; letter-spacing:.5px; z-index:3; display:none; box-shadow:0 6px 14px rgba(0,0,0,.18)}
+  :is(.card, .producto).agotado .agotado-badge{display:inline-block}
+  :is(.card, .producto).agotado{pointer-events:none; cursor:not-allowed}
+
+  /* Marca visual si una card es favorita */
+  .producto.fav::after{
+    content:"★"; position:absolute; top:10px; right:12px;
+    font-weight:900; font-size:18px; color:#FFB703; text-shadow:0 1px 0 #0003;
+  }
+
+  /* ===== DRAWER ===== */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:.25s;z-index:65}
+  .overlay.show{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;left:0;top:0;bottom:0;width:84vw;max-width:380px;background:#121212;color:#fff; transform:translateX(-100%);transition:transform .3s ease;z-index:80;display:flex;flex-direction:column}
+  .drawer.show{transform:translateX(0)}
+  .drawer header{display:flex;align-items:center;justify-content:space-between;padding:18px 16px;border-bottom:1px solid #222}
+  .drawer .title{font-weight:900;letter-spacing:2px}
+  .drawer .close{background:none;border:none;color:#fff;font-size:24px;cursor:pointer}
+  .drawer nav{padding:8px 0;display:block}
+  .mitem{display:flex;align-items:center;justify-content:space-between;color:#fff;text-decoration:none;padding:16px 18px;border-bottom:1px solid #1f1f1f;font-weight:700;letter-spacing:.5px;width:100%}
+  .mitem small{color:#bbb;font-weight:600}
+  .chev{font-size:18px;color:#bbb}
+  button.mitem{background:none;border:none;text-align:left;cursor:pointer;font:inherit;color:inherit}
+  button.mitem:focus-visible{outline:2px solid #ffffff33;outline-offset:2px}
+  .panel{max-height:0;overflow:hidden;transition:max-height .25s ease;background:#0f0f0f}
+  .panel a{display:block;color:#ddd;text-decoration:none;padding:12px 24px;border-bottom:1px solid #1a1a1a;font-weight:600}
+  .panel a:hover{background:#1b1b1b;color:#fff}
+  .no-scroll{overflow:hidden}
+
+  @media (max-width:1180px){ .producto-lista{grid-template-columns:repeat(3,1fr)} }
+  @media (max-width:980px){
+    .hamburger{display:block}
+    .brand{font-size:20px}
+    .navwrap{display:none}
+    .producto-lista{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:560px){
+    .producto-lista{grid-template-columns:1fr}
+  }
+
+  /* ===== PDP (PÁGINA DE PRODUCTO) ===== */
+  .pdp{display:none; padding:28px 5%}
+  .pdp.show{display:block}
+  .pdp-grid{display:grid; grid-template-columns:1.2fr .8fr; gap:28px}
+  @media (max-width:980px){ .pdp-grid{grid-template-columns:1fr} }
+
+  /* Galería */
+  .pdp-gallery{display:grid; grid-template-columns:120px 1fr; gap:14px; align-items:start}
+  @media (max-width:560px){ .pdp-gallery{grid-template-columns:1fr} }
+
+  /* ===== IMAGEN PRINCIPAL ===== */
+  .pdp-main{
+    width:100%;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    padding:10px; overflow:hidden;
+  }
+  .pdp-main img{ width:70%; height:auto; object-fit:contain }
+
+  /* ===== THUMBS ===== */
+  .pdp-thumbs{ display:flex; flex-direction:column; gap:12px; padding-right:8px }
+  .pdp-thumb{
+    width:70%; aspect-ratio:1/1; border:1px solid var(--line); border-radius:12px;
+    overflow:hidden; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .pdp-thumb img{ width:100%; height:100%; object-fit:cover }
+  @media (max-width:560px){
+    .pdp-thumbs{ order:2; flex-direction:row; overflow-x:auto }
+    .pdp-thumb{ width:76px; aspect-ratio:1/1; flex-shrink:0 }
+  }
+
+  .footer-bar{
+    background:#000; color:#fff; padding:22px 5%; text-align:center;
+    font-weight:600; font-size:15px; letter-spacing:0.3px;
+  }
+
+  .pdp-title{font-size:26px; font-weight:900; margin-bottom:6px}
+  .pdp-price{font-weight:900;margin:6px 0 12px;font-size:20px}
+  .pdp-desc{font-size:14px; color:#444; line-height:1.55; margin:0 0 16px}
+  .pdp-row{margin:14px 0}
+  .pdp-actions{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 14px;border-radius:10px;border:1px solid #ddd;background:#fff;cursor:pointer;font-weight:800}
+  .btn-buy{background:#25D366;border:1px solid #25D366;color:#fff}
+  .btn-buy:hover{filter:brightness(.95)}
+  .btn-outline{background:#fff}
+
+  /* Barra sticky en mobile */
+  .pdp-sticky{display:none}
+  @media (max-width:680px){
+    .pdp-sticky{
+      position:fixed; left:0; right:0; bottom:0; z-index:60;
+      background:#fff; border-top:1px solid var(--line);
+      padding:10px 12px; display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    body.has-sticky{padding-bottom:68px}
+    .pdp-sticky .price{font-weight:900}
+    .pdp-sticky .btn-buy{padding:12px 18px}
+  }
+
+  /* ===== FRANJA NEGRA INFERIOR ===== */
+  .bottom-strip{position:fixed; left:0; right:0; bottom:0; height:10px; background:#000; z-index:10}
+
+  /* Mensaje de vacíos (favoritos) */
+  .empty-favs{
+    grid-column:1/-1;
+    padding:40px;
+    text-align:center;
+    color:#666;
+    font-weight:600;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-controls="drawer" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="brand" id="brandHome" style="cursor:pointer">SPORT IMPORTS</div>
+
+  <!-- Search compact -->
+  <div class="searchwrap" id="searchWrap">
+    <button class="s-toggle" id="sToggle" aria-expanded="false" aria-controls="sPanel">
+      <span class="loupe">🔎</span> <span style="font-weight:800">Buscar</span>
+    </button>
+    <div class="s-panel" id="sPanel">
+      <div class="s-field">
+        <span class="icon-loupe">🔎</span>
+        <input id="searchInput" class="s-input" type="search" placeholder="Buscar (ej. warrior, gymshark, youngla)"/>
+        <button id="searchClear" class="s-clear" title="Limpiar">✕</button>
+      </div>
+      <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; font-weight:700; font-size:12px; color:#666">
+        Atajos:
+        <a href="#" data-search="youngla" style="background:var(--pill); padding:4px 8px; border-radius:999px; text-decoration:none; color:inherit">Youngla</a>
+        <a href="#" data-search="gymshark" style="background:var(--pill); padding:4px 8px; border-radius:999px; text-decoration:none; color:inherit">Gymshark</a>
+        <a href="#" data-search="warrior"  style="background:var(--pill); padding:4px 8px; border-radius:999px; text-decoration:none; color:inherit">Warrior</a>
+        <a href="#" data-clear   style="margin-left:auto; text-decoration:none">Limpiar todo</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón Favoritos -->
+  <button id="favBtn" class="fav-btn" aria-pressed="false" title="Ver favoritos">
+    ★ Favoritos <span id="favCount" class="fav-count">0</span>
+  </button>
+</header>
+
+<!-- NAV DESKTOP -->
+<div class="navwrap" id="navwrap">
+  <nav>
+    <div class="nav-item">
+      <button>Marcas ▾</button>
+      <div class="mega">
+        <div class="mega-grid">
+          <div>
+            <h4>Top</h4>
+            <a href="#" data-filter-brand="youngla">Youngla</a>
+            <a href="#" data-filter-brand="gymshark">Gymshark</a>
+            <a href="#" data-filter-brand="breathedivinity">BreatheDivinity</a>
+            <a href="#" data-filter-brand="controlled">Controlled Insanity</a>
+            <a href="#" data-filter-brand="rawgear">Raw Gear</a>
+          </div>
+          <div>
+            <h4>Novedades</h4>
+            <a href="#" data-search="new drop">New Drop</a>
+            <a href="#" data-search="best sellers">Best Sellers</a>
+            <a href="#" data-search="restock">Restock</a>
+          </div>
+          <div>
+            <h4>Soporte</h4>
+            <a href="#">Envíos</a><a href="#">Cambios & Devoluciones</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <button>Para Hombre ▾</button>
+      <div class="mega">
+        <div class="mega-grid">
+          <div>
+            <h4>Productos</h4>
+            <a href="#" data-search="tanks">Tanks</a><a href="#" data-search="shirt">Shirts</a><a href="#" data-search="longsleeve">Longsleeves</a><a href="#" data-search="shorts">Shorts</a>
+            <a href="#" data-search="pants">Pants/Jeans</a><a href="#" data-search="outerwear">Outerwear</a><a href="#" data-search="joggers">Joggers</a>
+            <a href="#" data-search="hat">Hats/Beanies</a><a href="#" data-search="accessories">Accessories</a>
+          </div>
+          <div>
+            <h4>Destacados</h4>
+            <a href="#" data-search="preview">Preview New Drop</a><a href="#" data-search="new drop">New Drop</a><a href="#" data-search="best">Best Sellers</a>
+            <a href="#" data-search="sale">SALE <span class="badge">% OFF</span></a>
+          </div>
+          <div>
+            <h4>Colecciones</h4>
+            <a href="#" data-search="cars">Cars & Curls</a><a href="#" data-search="tren tech">Tren Tech</a><a href="#" data-search="collab">Collabs</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <button>Para Mujer ▾</button>
+      <div class="mega">
+        <div class="mega-grid">
+          <div>
+            <h4>Productos</h4>
+            <a href="#" data-search="bra">Bras</a><a href="#" data-search="top">Tops</a><a href="#" data-search="dress">Bodysuits/Dresses</a><a href="#" data-search="short">Shorts/Skirts</a>
+            <a href="#" data-search="legging">Leggings</a><a href="#" data-search="jogger">Joggers/Pants</a><a href="#" data-search="outerwear">Outerwear</a>
+            <a href="#" data-search="matching set">Matching Sets</a><a href="#" data-search="accessories">Accessories</a>
+          </div>
+          <div>
+            <h4>Destacados</h4>
+            <a href="#" data-search="preview">Preview New Drop</a><a href="#" data-search="new drop">New Drop</a><a href="#" data-search="best">Best Sellers</a>
+            <a href="#" data-search="sale">SALE <span class="badge">% OFF</span></a>
+          </div>
+          <div>
+            <h4>Campañas</h4>
+            <a href="#" data-search="lookbook">Lookbook</a><a href="#" data-search="collab">Collabs</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<!-- DRAWER MÓVIL -->
+<div class="overlay" id="overlay" aria-hidden="true"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <header>
+    <div class="title">SPORT IMPORTS</div>
+    <button class="close" id="dClose" aria-label="Cerrar">✕</button>
+  </header>
+  <nav>
+    <button class="mitem" data-acc="marcas"><span>MARCAS</span><span class="chev">›</span></button>
+    <div class="panel" id="acc-marcas">
+      <a href="#" data-filter-brand="youngla">Youngla</a>
+      <a href="#" data-filter-brand="gymshark">Gymshark</a>
+      <a href="#" data-filter-brand="breathedivinity">BreatheDivinity</a>
+      <a href="#" data-filter-brand="controlled">Controlled Insanity</a>
+      <a href="#" data-filter-brand="rawgear">Raw Gear</a>
+    </div>
+
+    <a class="mitem" href="#" data-search="new drop"><span>NEW DROP</span><small>Últimos lanzamientos</small></a>
+
+    <button class="mitem" data-acc="hombre"><span>PARA HOMBRE</span><span class="chev">›</span></button>
+    <div class="panel" id="acc-hombre">
+      <a href="#" data-search="shirt">Shirts</a> <a href="#" data-search="longsleeve">Longsleeves</a> <a href="#" data-search="shorts">Shorts</a>
+    </div>
+
+    <button class="mitem" data-acc="mujer"><span>PARA MUJER</span><span class="chev">›</span></button>
+    <div class="panel" id="acc-mujer">
+      <a href="#" data-search="legging">Leggings</a> <a href="#" data-search="top">Tops</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- HERO -->
+<section class="hero" id="hero" aria-label="Hero carousel">
+  <div class="slides" id="slides">
+    <div class="slide">
+      <img src="https://images.unsplash.com/photo-1593032457860-608e983f24be?auto=format&fit=crop&w=1920&q=80" alt="">
+      <div class="cta"><h2>NUEVO DROP</h2><a href="#">SHOP NOW</a></div>
+    </div>
+    <div class="slide">
+      <img src="https://images.unsplash.com/photo-1571907480495-3b1618f1172b?auto=format&fit=crop&w=1920&q=80" alt="">
+      <div class="cta"><h2>RESTOCK</h2><a href="#">VER MÁS</a></div>
+    </div>
+    <div class="slide">
+      <img src="https://images.unsplash.com/photo-1534367610401-9f51f15bfb38?auto=format&fit=crop&w=1920&q=80" alt="">
+      <div class="cta"><h2>BEST SELLERS</h2><a href="#">COMPRAR</a></div>
+    </div>
+  </div>
+  <button class="h-arrow h-prev" id="prev">‹</button>
+  <button class="h-arrow h-next" id="next">›</button>
+  <div class="dots" id="dots"></div>
+</section>
+
+<!-- LISTADO -->
+<section class="producto-grid" id="grid">
+  <h3 id="gridTitle">Novedades</h3>
+
+  <div class="producto-lista">
+
+    <!-- ===== GYMSHARK ===== -->
+    <div class="producto" data-brand="gymshark" data-wa="59170661091">
+      <img src="g1.jpeg" data-img alt="Oversize Tee gris">
+      <div class="p-info">
+        <div class="p-titulo">Element Baselayer Mock Neck Long Sleeve T-Shirt</div>
+        <div class="price">Bs 1200</div>
+        <div class="p-desc" hidden>Compresión ligera y secado rápido.</div>
+        <div class="variantes">
+          <button class="var selected" style="background:#ddd" data-img="g1.jpeg" aria-label="Gris"></button>
+          <button class="var" style="background:#fff" data-img="g2.jpeg" aria-label="Blanco"></button>
+        </div>
+        <div class="tallas">
+          <button class="talla selected">S</button><button class="talla">M</button><button class="talla">L</button><button class="talla">XL</button><button class="talla">XXL</button>
+        </div>
+      </div>
+      <div class="gallery" hidden>
+        <img src="g1.jpeg" alt=""><img src="g2.jpeg" alt="">
+      </div>
+    </div>
+
+    <div class="producto" data-brand="gymshark" data-wa="59170661091">
+      <img src="g3.jpeg" data-img alt="Geo Seamless">
+      <div class="p-info">
+        <div class="p-titulo">Geo Seamless Long Sleeve T-Shirt</div>
+        <div class="price">Bs 1250</div>
+        <div class="p-desc" hidden>Tejido seamless con patrón geométrico.</div>
+        <div class="variantes"><button class="var selected" style="background:#000" data-img="g3.jpeg" aria-label="Negro"></button></div>
+        <div class="tallas">
+          <button class="talla selected">S</button><button class="talla">M</button><button class="talla">L</button><button class="talla">XL</button><button class="talla">XXL</button>
+        </div>
+      </div>
+      <div class="gallery" hidden><img src="g3.jpeg" alt=""></div>
+    </div>
+
+    <div class="producto" data-brand="gymshark" data-wa="59170661091">
+      <img src="elementbaselayerlongsleeveblack.jpeg" data-img alt="Element Baselayer Long Sleeve Black">
+      <div class="p-info">
+        <div class="p-titulo">Element Baselayer Long Sleeve T-Shirt</div>
+        <div class="price">Bs 1100</div>
+        <div class="p-desc" hidden>Base layer respirable para entrenamiento.</div>
+        <div class="variantes">
+          <button class="var selected" style="background:#000000" data-img="elementbaselayerlongsleeveblack.jpeg" aria-label="Negro"></button>
+          <button class="var" style="background:#fdfdfd" data-img="elementbaselayerlongsleevewhite.jpeg" aria-label="Blanco"></button>
+        </div>
+        <div class="tallas">
+          <button class="talla selected">S</button><button class="talla">M</button><button class="talla">L</button><button class="talla">XL</button><button class="talla">XXL</button>
+        </div>
+      </div>
+      <div class="gallery" hidden>
+        <img src="elementbaselayerlongsleeveblack.jpeg" alt="">
+        <img src="elementbaselayerlongsleevewhite.jpeg" alt="">
+      </div>
+    </div>
+
+    <div class="producto" data-brand="gymshark" data-wa="59170661091">
+      <img src="elementbaselayerlongsleevegray.jpeg" data-img alt="Element Baselayer Long Sleeve Gray">
+      <div class="p-info">
+        <div class="p-titulo">Element Baselayer Long Sleeve T-Shirt</div>
+        <div class="price">Bs 1000</div>
+        <div class="p-desc" hidden>Secado rápido y ajuste atlético.</div>
+        <div class="variantes">
+          <button class="var selected" style="background:#919191" data-img="elementbaselayerlongsleevegray.jpeg" aria-label="Gris"></button>
+          <button class="var" style="background:#0c6442" data-img="elementbaselayerlongsleevegreen.jpeg" aria-label="Verde"></button>
+          <button class="var" style="background:#6d5f5f" data-img="elementbaselayerlongsleevebrown.jpeg" aria-label="Marrón"></button>
+        </div>
+        <div class="tallas">
+          <button class="talla selected">S</button><button class="talla">M</button><button class="talla">L</button><button class="talla">XL</button><button class="talla">XXL</button>
+        </div>
+      </div>
+      <div class="gallery" hidden>
+        <img src="elementbaselayerlongsleevegray.jpeg" alt="">
+        <img src="elementbaselayerlongsleevegreen.jpeg" alt="">
+        <img src="elementbaselayerlongsleevebrown.jpeg" alt="">
+      </div>
+    </div>
+
+    <!-- ===== YOUNGLA ===== -->
+    <div class="producto agotado" data-brand="youngla" data-wa="59170661091">
+      <span class="agotado-badge">AGOTADO</span>
+      <img src="y1.jpeg" data-img alt="Warrior Hoodie">
+      <div class="p-info">
+        <div class="p-titulo">Warrior Compression Hoodies - 8062</div>
+        <div class="price">Bs 1000</div>
+        <div class="p-desc" hidden>Hoodie de compresión, corte atlético.</div>
+        <div class="variantes">
+          <button class="var" style="background:#e70d0d" data-img="y1.jpeg"></button>
+          <button class="var" style="background:#a19c9cc3" data-img="y2.jpeg"></button>
+          <button class="var" style="background:#000000" data-img="y3.jpeg"></button>
+          <button class="var" style="background:#3c8364cb" data-img="y4.jpeg"></button>
+        </div>
+        <div class="tallas">
+          <button class="talla agotada">S</button><button class="talla agotada">M</button>
+          <button class="talla agotada">L</button><button class="talla agotada">XL</button>
+          <button class="talla agotada">XXL</button>
+        </div>
+      </div>
+      <div class="gallery" hidden>
+        <img src="y1.jpeg" alt=""><img src="y2.jpeg" alt=""><img src="y3.jpeg" alt=""><img src="y4.jpeg" alt="">
+      </div>
+    </div>
+
+    <div class="producto" data-brand="youngla" data-wa="59170661091">
+      <img src="warriorcompressionteesblue.jpeg" data-img alt="Warrior Tees 4041">
+      <div class="p-info">
+        <div class="p-titulo">Warrior Compression Tees - 4041</div>
+        <div class="price">Bs 940</div>
+        <div class="p-desc" hidden>Tejido elástico con compresión media.</div>
+        <div class="variantes">
+          <button class="var selected" style="background:#2a2fac" data-img="warriorcompressionteesblue.jpeg"></button>
+          <button class="var" style="background:#000000" data-img="warriorcompressionteesblack.jpeg"></button>
+          <button class="var" style="background:#c0c0c0" data-img="warriorcompressionteesgray.jpeg"></button>
+          <button class="var" style="background:#490e68" data-img="warriorcompressionteespurple.jpeg"></button>
+        </div>
+        <div class="tallas">
+          <button class="talla selected">S</button><button class="talla">M</button><button class="talla">L</button><button class="talla">XL</button><button class="talla">XXL</button>
+        </div>
+      </div>
+      <div class="gallery" hidden>
+        <img src="warriorcompressionteesblue.jpeg" alt="">
+        <img src="warriorcompressionteesblack.jpeg" alt="">
+        <img src="warriorcompressionteesgray.jpeg" alt="">
+        <img src="warriorcompressionteespurple.jpeg" alt="">
+      </div>
+    </div>
+
+    <div class="producto" data-brand="youngla" data-wa="59170661091">
+      <img src="supermancompressionteesred.jpeg" data-img alt="Superman Compression Tees - 4117">
+      <div class="p-info">
+        <div class="p-titulo">Superman Compression Tees - 4117</div>
+        <div class="price">Bs 1050</div>
+        <div class="p-desc" hidden>Licencia oficial, compresión y suavidad.</div>
+        <div class="variantes">
+          <button class="var agotado" style="background:#e81a1a" data-img="supermancompressionteesred.jpeg"></button>
+          <button class="var agotado" style="background:#172bc8" data-img="supermancompressionteesblue.jpeg"></button>
+          <button class="var selected" style="background:#000000" data-img="supermancompressionteesblack.jpeg"></button>
+          <button class="var agotado" style="background:#490e68" data-img="supermancompressionteespurple.jpeg"></button>
+        </div>
+        <div class="tallas">
+          <button class="talla agotada">S</button><button class="talla selected">M</button>
+          <button class="talla agotada">L</button><button class="talla agotada">XL</button>
+          <button class="talla agotada">XXL</button>
+        </div>
+      </div>
+      <div class="gallery" hidden>
+        <img src="supermancompressionteesblack.jpeg" alt="">
+        <img src="supermancompressionteesred.jpeg" alt="">
+        <img src="supermancompressionteesblue.jpeg" alt="">
+        <img src="supermancompressionteespurple.jpeg" alt="">
+      </div>
+    </div>
+
+    <!-- EL REGISTRO QUE PEDISTE -->
+    <div class="producto" data-brand="youngla" data-wa="59170661091">
+      <img src="supermangraphictees1.jpeg" data-img alt="Superman Graphic Tees - 4044">
+      <div class="p-info">
+        <div class="p-titulo">Superman Graphic Tees - 4044</div>
+        <div class="price">Bs 1020</div>
+        <div class="p-desc" hidden>Gráficos premium y algodón suave.</div>
+        <div class="variantes">
+          <button class="var selected" style="background:#000000" data-img="supermangraphictees1.jpeg"></button>
+          <button class="var" style="background:#000000" data-img="supermangraphictees2.jpeg"></button>
+          <button class="var" style="background:#000000" data-img="supermangraphictees3.jpeg"></button>
+          <button class="var" style="background:#000000" data-img="supermangraphictees4.jpeg"></button>
+          <button class="var" style="background:#000000" data-img="supermangraphictees5.jpeg"></button>
+        </div>
+        <div class="tallas">
+          <button class="talla selected">S</button><button class="talla">M</button><button class="talla">L</button><button class="talla">XL</button><button class="talla">XXL</button>
+        </div>
+      </div>
+      <div class="gallery" hidden>
+        <img src="supermangraphictees1.jpeg" alt="">
+        <img src="supermangraphictees2.jpeg" alt="">
+        <img src="supermangraphictees3.jpeg" alt="">
+        <img src="supermangraphictees4.jpeg" alt="">
+        <img src="supermangraphictees5.jpeg" alt="">
+      </div>
+    </div>
+
+    <!-- Mensaje vacío Favoritos -->
+    <div id="emptyFavs" class="empty-favs" hidden>
+      Aún no tienes favoritos. Entra a un producto y pulsa “Añadir a favoritos”.
+    </div>
+
+  </div>
+</section>
+
+<!-- PDP (vista de producto) -->
+<main id="pdp" class="pdp" aria-live="polite"></main>
+<div id="pdpSticky" class="pdp-sticky" hidden>
+  <div class="price" id="stickyPrice">Bs 0</div>
+  <button class="btn btn-buy" id="stickyBuy">Comprar por WhatsApp</button>
+</div>
+
+<footer class="footer-bar">
+  SPORT IMPORTS © 2025 — Todos los derechos reservados
+</footer>
+
+<!-- FRANJA NEGRA INFERIOR -->
+<div class="bottom-strip" aria-hidden="true"></div>
+
+<!-- CAROUSEL HERO -->
+<script>
+const slides=document.getElementById('slides');
+const total=slides.children.length;
+let index=0,timer;
+const dots=document.getElementById('dots');
+function renderDots(){ dots.innerHTML=''; for(let i=0;i<total;i++){ const d=document.createElement('div'); d.className='dot'+(i===index?' active':''); d.addEventListener('click',()=>go(i,true)); dots.appendChild(d);} }
+function go(i,manual=false){ index=(i+total)%total; slides.style.transform=`translateX(-${index*100}vw)`; renderDots(); if(manual) restart(); }
+function next(){go(index+1)} function prev(){go(index-1)}
+function restart(){clearInterval(timer);timer=setInterval(next,4500)}
+document.getElementById('next').onclick=()=>go(index+1,true);
+document.getElementById('prev').onclick=()=>go(index-1,true);
+renderDots();restart();
+</script>
+
+<!-- HOVER NAV -->
+<script>
+(function(){
+  const navwrap=document.getElementById('navwrap'); if(!navwrap) return;
+  const items=navwrap.querySelectorAll('.nav-item'); const timers=new Map();
+  function openItem(item){items.forEach(i=>i.classList.remove('open'));item.classList.add('open');}
+  function scheduleClose(item){clearTimeout(timers.get(item));timers.set(item,setTimeout(()=>item.classList.remove('open'),200));}
+  function cancelClose(item){clearTimeout(timers.get(item));}
+  items.forEach(item=>{
+    const btn=item.querySelector('button'); const mega=item.querySelector('.mega');
+    item.addEventListener('mouseenter',()=>{cancelClose(item);openItem(item);});
+    item.addEventListener('mouseleave',()=>scheduleClose(item));
+    if(mega){mega.addEventListener('mouseenter',()=>cancelClose(item)); mega.addEventListener('mouseleave',()=>scheduleClose(item));}
+    btn.addEventListener('focus',()=>openItem(item));
+  });
+  document.addEventListener('mousemove',e=>{ if(!navwrap.contains(e.target)) items.forEach(i=>i.classList.remove('open')); });
+})();
+</script>
+
+<!-- APP: LISTA + PDP (router hash) -->
+<script>
+/* Drawer */
+const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay'), hb=document.getElementById('hamburger'), dClose=document.getElementById('dClose');
+function openDrawer(){ drawer.classList.add('show');overlay.classList.add('show');document.body.classList.add('no-scroll');hb?.setAttribute('aria-expanded','true');}
+function closeDrawer(){ drawer.classList.remove('show');overlay.classList.remove('show');document.body.classList.remove('no-scroll');hb?.setAttribute('aria-expanded','false');}
+hb?.addEventListener('click',openDrawer); dClose?.addEventListener('click',closeDrawer); overlay?.addEventListener('click',closeDrawer);
+window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();}});
+
+/* acordeones */
+document.querySelectorAll('.mitem[data-acc]').forEach(btn=>{
+  const id='acc-'+btn.dataset.acc; const panel=document.getElementById(id);
+  btn.addEventListener('click',()=>{
+    const isOpen=panel.style.maxHeight && panel.style.maxHeight!=='0px';
+    document.querySelectorAll('.panel').forEach(p=>p.style.maxHeight=null);
+    if(!isOpen){panel.style.maxHeight=panel.scrollHeight+'px';}
+  });
+});
+
+/* Variantes/Tallas en cards */
+document.querySelectorAll('.producto').forEach(card=>{
+  const img=card.querySelector('[data-img]');
+  card.querySelectorAll('.var').forEach(dot=>{
+    dot.addEventListener('click',e=>{
+      e.stopPropagation(); if(dot.classList.contains('agotado')) return;
+      img.src=dot.dataset.img; card.querySelectorAll('.var').forEach(v=>v.classList.remove('selected')); dot.classList.add('selected');
+    });
+  });
+  card.querySelectorAll('.talla').forEach(t=>{
+    t.addEventListener('click',e=>{
+      e.stopPropagation(); if(t.classList.contains('agotada')) return;
+      card.querySelectorAll('.talla').forEach(x=>x.classList.remove('selected')); t.classList.add('selected');
+    });
+  });
+});
+
+/* ====== Buscador/Filtro ====== */
+const hero = document.getElementById('hero');
+const grid = document.getElementById('grid');
+const gridTitle = document.getElementById('gridTitle');
+const sToggle = document.getElementById('sToggle');
+const sPanel  = document.getElementById('sPanel');
+const searchInput = document.getElementById('searchInput');
+const searchClear = document.getElementById('searchClear');
+const list = document.querySelector('.producto-lista');
+
+let brandFilter=null;
+function setTitle(t){ gridTitle.textContent=t; }
+function showHero(ok){ hero.style.display = ok ? '' : 'none'; }
+
+function reorderVisible(){
+  const cards=[...list.querySelectorAll('.producto')];
+  const visible=cards.filter(c=>c.style.display!=='none');
+  const hidden =cards.filter(c=>c.style.display==='none');
+  visible.sort((a,b)=> (a.classList.contains('agotado')?1:0) - (b.classList.contains('agotado')?1:0) );
+  list.innerHTML=''; [...visible, ...hidden].forEach(c=>list.appendChild(c));
+}
+
+function applyFilters(){
+  const qRaw = (searchInput.value || '').trim().toLowerCase();
+  let q = qRaw;
+  const knownBrand = ['youngla','gymshark','breathedivinity','rawgear','controlled'];
+
+  if(knownBrand.includes(qRaw)){ brandFilter = qRaw; searchInput.value = ''; q = ''; }
+
+  document.querySelectorAll('.producto').forEach(card=>{
+    const title = card.querySelector('.p-titulo')?.textContent.toLowerCase() || '';
+    const brand = (card.dataset.brand || '').toLowerCase();
+    const okText = !q || title.includes(q);
+    const okBrand = !brandFilter || brand===brandFilter;
+    card.style.display = (okText && okBrand) ? '' : 'none';
+  });
+
+  if(brandFilter){ setTitle(brandFilter.charAt(0).toUpperCase()+brandFilter.slice(1)); showHero(false);
+  }else if(q){ setTitle('Resultados'); showHero(false);
+  }else{ setTitle('Novedades'); showHero(true); }
+
+  document.getElementById('emptyFavs')?.setAttribute('hidden','');
+  reorderVisible();
+}
+
+sToggle.addEventListener('click', ()=>{
+  const open = !sPanel.classList.contains('show');
+  sPanel.classList.toggle('show', open);
+  sToggle.setAttribute('aria-expanded', open ? 'true':'false');
+  if(open) searchInput.focus();
+});
+searchInput.addEventListener('input', applyFilters);
+searchClear.addEventListener('click', ()=>{ searchInput.value=''; brandFilter=null; applyFilters(); });
+
+document.querySelectorAll('[data-filter-brand]').forEach(a=>{
+  a.addEventListener('click', e=>{
+    e.preventDefault(); brandFilter=a.dataset.filterBrand; searchInput.value=''; closeDrawer(); sPanel.classList.remove('show'); applyFilters();
+    document.querySelector('.producto-grid')?.scrollIntoView({behavior:'smooth'});
+  });
+});
+document.querySelectorAll('[data-search]').forEach(a=>{
+  a.addEventListener('click', e=>{
+    e.preventDefault();
+    searchInput.value = a.dataset.search; brandFilter=null; closeDrawer(); sPanel.classList.add('show'); applyFilters(); searchInput.focus();
+  });
+});
+document.querySelectorAll('[data-clear]').forEach(a=>{
+  a.addEventListener('click', e=>{
+    e.preventDefault(); brandFilter=null; searchInput.value=''; closeDrawer(); sPanel.classList.add('show'); applyFilters(); searchInput.focus();
+  });
+});
+applyFilters();
+
+/* ====== Router y Favoritos ====== */
+const WHATSAPP_NUMBER = "59170661091";
+const pdp = document.getElementById('pdp');
+const stickyBar = document.getElementById('pdpSticky');
+const stickyPrice = document.getElementById('stickyPrice');
+const stickyBuy = document.getElementById('stickyBuy');
+const brandHome = document.getElementById('brandHome');
+
+const FAVORITES_KEY = "favoritosSportImports";
+const favBtn = document.getElementById('favBtn');
+const favCount = document.getElementById('favCount');
+function getFavs(){ try{return JSON.parse(localStorage.getItem(FAVORITES_KEY)||"[]");}catch(e){return [];} }
+function saveFavs(arr){ localStorage.setItem(FAVORITES_KEY, JSON.stringify(arr)); }
+function updateFavCount(){ favCount.textContent = getFavs().length; }
+
+function slugify(t){ return (t||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+
+/* Índice de productos con slug ÚNICO por card */
+const productIndex = new Map();
+let autoId = 0;
+document.querySelectorAll('.producto').forEach(card=>{
+  const title = card.querySelector('.p-titulo')?.textContent.trim() || 'Producto';
+  const brand = card.dataset.brand || '';
+  const img = card.querySelector('[data-img]')?.getAttribute('src') || '';
+  const imgBase = img.split('/').pop()?.split('.')[0] || '';
+  // Título + marca + imagen principal + índice => slug único
+  const slug = slugify(`${title}-${brand}-${imgBase}-${autoId++}`);
+  productIndex.set(slug, card);
+  card.dataset.slug = slug;
+});
+
+/* Estado visual de favoritos al cargar */
+(function initFavMarks(){
+  const favs = new Set(getFavs());
+  document.querySelectorAll('.producto').forEach(c=>{
+    c.classList.toggle('fav', favs.has(c.dataset.slug));
+  });
+  updateFavCount();
+})();
+
+/* Navegación desde cards (usa el slug único) */
+document.querySelectorAll('.producto:not(.agotado)').forEach(card=>{
+  card.addEventListener('click', e=>{
+    if(e.target.closest('.var') || e.target.closest('.talla')) return;
+    location.hash = `#/product/${card.dataset.slug}`;
+  });
+});
+
+/* Vistas */
+function showHome(){
+  stickyBar.hidden = true;
+  document.body.classList.remove('has-sticky');
+  brandFilter = null;
+  if (searchInput) searchInput.value = '';
+  sPanel?.classList.remove('show');
+  hero.style.display = '';
+  grid.style.display = 'block';
+  gridTitle.textContent = 'Novedades';
+  document.querySelectorAll('.producto').forEach(c=> c.style.display = '');
+  document.getElementById('emptyFavs')?.setAttribute('hidden','');
+  applyFilters();
+  window.scrollTo(0,0);
+}
+brandHome.addEventListener('click', (e)=>{ e.preventDefault(); location.hash = ''; });
+
+function showFavorites(){
+  stickyBar.hidden = true;
+  document.body.classList.remove('has-sticky');
+  const favs = new Set(getFavs());
+  hero.style.display = 'none';
+  grid.style.display = 'block';
+  gridTitle.textContent = 'Favoritos';
+  let any=false;
+  document.querySelectorAll('.producto').forEach(card=>{
+    const show = favs.has(card.dataset.slug);
+    card.style.display = show ? '' : 'none';
+    if (show) any=true;
+  });
+  const empty = document.getElementById('emptyFavs');
+  if (empty) empty.hidden = any;
+}
+
+/* Un solo click: ir a #/favorites */
+favBtn?.addEventListener('click', ()=>{ location.hash = '#/favorites'; });
+
+/* Utilidades PDP */
+function collectImages(card){
+  const urls=new Set();
+  card.querySelectorAll('.gallery img').forEach(im=>urls.add(im.getAttribute('src')));
+  const main=card.querySelector('[data-img]'); if(main) urls.add(main.getAttribute('src'));
+  card.querySelectorAll('.var').forEach(v=>{ if(v.dataset.img) urls.add(v.dataset.img); });
+  return [...urls];
+}
+
+function renderPDPFromCard(card){
+  const title = card.querySelector('.p-titulo')?.textContent.trim() || 'Producto';
+  const price = card.querySelector('.price')?.textContent.trim() || '';
+  const descNode = card.querySelector('.p-desc');
+  const desc = descNode ? descNode.textContent.trim() : 'Producto original e importado. Stock sujeto a disponibilidad.';
+  const images = collectImages(card);
+  const wa = card.dataset.wa || WHATSAPP_NUMBER;
+
+  pdp.innerHTML = `
+    <div style="margin-bottom:10px"><a href="#" id="backLink" style="text-decoration:none;color:#333;font-weight:800">← Volver</a></div>
+    <div class="pdp-grid">
+      <section class="pdp-gallery">
+        <div class="pdp-thumbs" id="pdpThumbs"></div>
+        <div class="pdp-main"><img id="pdpMain" src="${images[0]||''}" alt=""></div>
+      </section>
+      <section>
+        <h1 class="pdp-title">${title}</h1>
+        <div class="pdp-price" id="pdpPrice">${price}</div>
+        <div class="pdp-desc">${desc}</div>
+        <div class="pdp-row"><div style="font-weight:700;margin-bottom:6px">Color</div><div id="pdpColors" class="variantes"></div></div>
+        <div class="pdp-row"><div style="font-weight:700;margin-bottom:6px">Talla</div><div id="pdpSizes" class="tallas"></div></div>
+        <div class="pdp-actions">
+          <button class="btn btn-buy" id="pdpBuy">Comprar por WhatsApp</button>
+          <button class="btn btn-outline" id="pdpFav">Añadir a favoritos</button>
+        </div>
+      </section>
+    </div>
+  `;
+
+  // thumbs
+  const thumbs = document.getElementById('pdpThumbs');
+  const mainImg = document.getElementById('pdpMain');
+  images.forEach((src)=>{
+    const t = document.createElement('div');
+    t.className='pdp-thumb';
+    t.innerHTML=`<img src="${src}" alt="">`;
+    t.addEventListener('click',()=>{ mainImg.src = src; });
+    thumbs.appendChild(t);
+  });
+
+  // Colores
+  const pdpColors = document.getElementById('pdpColors');
+  const colorBtns = [];
+  card.querySelectorAll('.var').forEach((v,idx)=>{
+    const b=v.cloneNode(true);
+    b.addEventListener('click',()=>{
+      colorBtns.forEach(x=>x.classList.remove('selected')); b.classList.add('selected');
+      const img = b.dataset.img; if(img) mainImg.src = img;
+    });
+    if(idx===0) b.classList.add('selected');
+    colorBtns.push(b); pdpColors.appendChild(b);
+  });
+
+  // Tallas
+  const pdpSizes = document.getElementById('pdpSizes');
+  const sizeBtns = [];
+  const tallas=card.querySelectorAll('.talla');
+  if(tallas.length){
+    tallas.forEach((t,idx)=>{
+      const b=t.cloneNode(true);
+      b.addEventListener('click',()=>{
+        if(b.classList.contains('agotada')) return;
+        sizeBtns.forEach(x=>x.classList.remove('selected')); b.classList.add('selected');
+      });
+      if(idx===0 && !b.classList.contains('agotada')) b.classList.add('selected');
+      sizeBtns.push(b); pdpSizes.appendChild(b);
+    });
+  }else{
+    ['S','M','L','XL'].forEach((sz,i)=>{
+      const b=document.createElement('button'); b.className='talla'+(i===0?' selected':''); b.textContent=sz;
+      b.addEventListener('click',()=>{ sizeBtns.forEach(x=>x.classList.remove('selected')); b.classList.add('selected');});
+      sizeBtns.push(b); pdpSizes.appendChild(b);
+    });
+  }
+
+  function currentColor(){
+    const c = pdpColors.querySelector('.var.selected');
+    return c ? (c.getAttribute('aria-label') || 'Color seleccionado') : 'Color N/D';
+  }
+  function currentSize(){
+    const s = pdpSizes.querySelector('.talla.selected');
+    return s ? s.textContent.trim() : 'Talla N/D';
+  }
+
+  function openWA(){
+    const msg = `Hola! Quiero comprar:\n• ${title}\n• ${price}\n• ${currentColor()}\n• Talla: ${currentSize()}\n\nLink: ${location.href}`;
+    const url = `https://wa.me/${wa}?text=${encodeURIComponent(msg)}`;
+    window.open(url,'_blank');
+  }
+  document.getElementById('pdpBuy').addEventListener('click', openWA);
+
+  /* Favoritos en PDP (usa slug único) */
+  const pdpFavBtn = document.getElementById('pdpFav');
+  const currentSlug = card.dataset.slug;
+  const isFav = (sl)=> getFavs().includes(sl);
+  function setFavUI(){
+    pdpFavBtn.textContent = isFav(currentSlug) ? "Guardado ✓" : "Añadir a favoritos";
+    card.classList.toggle('fav', isFav(currentSlug));
+  }
+  setFavUI();
+
+  pdpFavBtn.addEventListener('click', ()=>{
+    let favs = getFavs();
+    if (isFav(currentSlug)){ favs = favs.filter(s=>s!==currentSlug); }
+    else{ favs.push(currentSlug); }
+    saveFavs(favs); updateFavCount(); setFavUI();
+  });
+
+  document.getElementById('backLink').addEventListener('click',(e)=>{ e.preventDefault(); history.back(); });
+
+  // Sticky
+  stickyPrice.textContent = price;
+  stickyBuy.onclick = openWA;
+
+  pdp.classList.add('show');
+  grid.style.display='none';
+  hero.style.display='none';
+  stickyBar.hidden = false;
+  document.body.classList.add('has-sticky');
+}
+
+/* Router con rutas: "", "#/product/:slug", "#/favorites" */
+function onRoute(){
+  const favR = location.hash === '#/favorites';
+  const prodM = location.hash.match(/^#\/product\/(.+)$/);
+
+  if(favR){
+    pdp.classList.remove('show'); pdp.innerHTML='';
+    showFavorites(); window.scrollTo(0,0);
+    closeDrawer();
+    return;
+  }
+  if(prodM){
+    const slug = prodM[1];
+    const card = productIndex.get(slug);
+    if(card){ renderPDPFromCard(card); window.scrollTo(0,0); }
+    return;
+  }
+
+  // HOME
+  pdp.classList.remove('show'); pdp.innerHTML='';
+  showHome();
+  closeDrawer();
+}
+window.addEventListener('hashchange', onRoute);
+onRoute();
+</script>
+
+
+</body>
+</html>
