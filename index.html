@@ -9,6 +9,8 @@
   :root{ --bg:#ffffff; --ink:#111111; --muted:#777; --line:#eaeaea; --accent:#FF9F1C; --topbar-h:72px; --danger:#d60000; --pill:#f1f1f1; }
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink)}
+  /* Fix universal para hidden */
+  [hidden]{ display:none !important; }
 
   /* ===== TOPBAR ===== */
   .topbar{position:sticky; top:0; z-index:70; height:var(--topbar-h); background:var(--accent); display:flex; align-items:center; gap:14px; padding:0 16px; box-shadow:0 2px 0 rgba(0,0,0,.04)}
@@ -45,7 +47,7 @@
 
   /* ===== NAV DESKTOP ===== */
   .navwrap{position:sticky; top:var(--topbar-h); z-index:50; background:#fff; border-bottom:1px solid var(--line); display:flex; justify-content:center}
-  nav{display:flex; gap:28px; padding:14px 20px}
+  nav{display:flex; gap:28px; padding:14px 20px; max-width:1200px; margin:0 auto;} /* ancho cómodo */
   nav>.nav-item{position:relative; padding-bottom:10px}
   nav>.nav-item>button{background:none;border:none;cursor:pointer;font-weight:700;font-size:15px;color:var(--ink);padding:8px 10px;border-radius:8px;transition:.15s}
   nav>.nav-item>button:hover{color:var(--accent);background:rgba(255,159,28,.10)}
@@ -59,7 +61,7 @@
   /* ===== HERO ===== */
   .hero{position:relative;overflow:hidden}
   .slides{display:flex;transition:transform .6s ease}
-  .slide{min-width:100vw;height:62vh;display:flex;align-items:center;justify-content:center;position:relative}
+  .slide{min-width:100vw; height:min(78vh,740px); display:flex; align-items:center; justify-content:center; position:relative}
   .slide::before{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.2))}
   .slide img{width:100%;height:100%;object-fit:cover}
   .cta{position:absolute;z-index:2;display:flex;flex-direction:column;align-items:center;gap:14px}
@@ -71,15 +73,24 @@
   .dot{width:9px;height:9px;border-radius:50%;background:#fff7;border:1px solid #fff;cursor:pointer}
   .dot.active{background:#fff}
 
+  @media (max-width:980px){ .slide{height:62vh} }
+  @media (max-width:560px){
+    .slide{height:56vh}
+    .cta h2{font-size:34px; letter-spacing:1px}
+    .cta a{padding:12px 22px; border-radius:12px}
+  }
+  @media (max-width:480px){ .s-toggle span:last-child{display:none} .brand{font-size:18px} }
+
   /* ===== GRID ===== */
-  .producto-grid{padding:50px 5%}
+  .producto-grid{padding:50px 4%; max-width:1200px; margin:0 auto;}
   .producto-grid h3{text-align:center;font-size:30px;font-weight:900;margin-bottom:22px}
   .producto-lista{display:grid;gap:24px;grid-template-columns:repeat(4,1fr)}
   .producto{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.25s;cursor:pointer; position:relative}
   .producto:hover{transform:scale(1.02);box-shadow:0 12px 26px rgba(0,0,0,.12)}
-  .producto img{width:100%;height:260px;object-fit:cover;display:block}
+  /* Youngla-style: ratio 3:4 */
+  .producto img{width:100%; aspect-ratio:3/4; height:auto; object-fit:cover; display:block}
   .p-info{padding:14px 16px}
-  .p-titulo{font-weight:700;font-size:17px}
+  .p-titulo{font-weight:800;font-size:16px; line-height:1.25}
   .variantes{display:flex;gap:8px;margin-top:12px}
   .var{width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid #fff;outline:1px solid #ccc;transition:transform .1s;position:relative}
   .var:hover{transform:scale(1.2)} .var.selected{outline:2px solid #111}
@@ -132,7 +143,7 @@
   }
 
   /* ===== PDP (PÁGINA DE PRODUCTO) ===== */
-  .pdp{display:none; padding:28px 5%}
+  .pdp{display:none; padding:28px 5%; max-width:1200px; margin:0 auto;}
   .pdp.show{display:block}
   .pdp-grid{display:grid; grid-template-columns:1.2fr .8fr; gap:28px}
   @media (max-width:980px){ .pdp-grid{grid-template-columns:1fr} }
@@ -155,7 +166,7 @@
   /* ===== THUMBS ===== */
   .pdp-thumbs{ display:flex; flex-direction:column; gap:12px; padding-right:8px }
   .pdp-thumb{
-    width:70%; aspect-ratio:1/1; border:1px solid var(--line); border-radius:12px;
+    width:86px; aspect-ratio:1/1; border:1px solid var(--line); border-radius:12px;
     overflow:hidden; cursor:pointer; display:flex; align-items:center; justify-content:center;
   }
   .pdp-thumb img{ width:100%; height:100%; object-fit:cover }
@@ -187,7 +198,7 @@
       background:#fff; border-top:1px solid var(--line);
       padding:10px 12px; display:flex; align-items:center; justify-content:space-between; gap:10px;
     }
-    body.has-sticky{padding-bottom:68px}
+    body.in-pdp{padding-bottom:68px}
     .pdp-sticky .price{font-weight:900}
     .pdp-sticky .btn-buy{padding:12px 18px}
   }
@@ -744,7 +755,6 @@ document.querySelectorAll('.producto').forEach(card=>{
   const brand = card.dataset.brand || '';
   const img = card.querySelector('[data-img]')?.getAttribute('src') || '';
   const imgBase = img.split('/').pop()?.split('.')[0] || '';
-  // Título + marca + imagen principal + índice => slug único
   const slug = slugify(`${title}-${brand}-${imgBase}-${autoId++}`);
   productIndex.set(slug, card);
   card.dataset.slug = slug;
@@ -771,6 +781,7 @@ document.querySelectorAll('.producto:not(.agotado)').forEach(card=>{
 function showHome(){
   stickyBar.hidden = true;
   document.body.classList.remove('has-sticky');
+  document.body.classList.remove('in-pdp');
   brandFilter = null;
   if (searchInput) searchInput.value = '';
   sPanel?.classList.remove('show');
@@ -787,6 +798,7 @@ brandHome.addEventListener('click', (e)=>{ e.preventDefault(); location.hash = '
 function showFavorites(){
   stickyBar.hidden = true;
   document.body.classList.remove('has-sticky');
+  document.body.classList.remove('in-pdp');
   const favs = new Set(getFavs());
   hero.style.display = 'none';
   grid.style.display = 'block';
@@ -932,6 +944,7 @@ function renderPDPFromCard(card){
   hero.style.display='none';
   stickyBar.hidden = false;
   document.body.classList.add('has-sticky');
+  document.body.classList.add('in-pdp'); // padding inferior solo en PDP (móvil)
 }
 
 /* Router con rutas: "", "#/product/:slug", "#/favorites" */
