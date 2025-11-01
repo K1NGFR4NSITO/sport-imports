@@ -592,13 +592,73 @@ function closeDrawer(){ drawer.classList.remove('show');overlay.classList.remove
 dClose?.addEventListener('click',closeDrawer); overlay?.addEventListener('click',closeDrawer);
 window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();}});
 
-/* Sub-barra móvil eventos */
-document.getElementById('hbMobile')?.addEventListener('click', openDrawer);
-document.getElementById('sToggleMobile')?.addEventListener('click', ()=>{
-  const sPanel=document.getElementById('sPanel'); const open=!sPanel.classList.contains('show');
-  sPanel.classList.toggle('show',open);
-  if(open) document.getElementById('searchInput').focus();
-});
+/* Sub-barra móvil eventos — FIX buscador móvil */
+(function(){
+  const hbMobile = document.getElementById('hbMobile');
+  const btnMobile = document.getElementById('sToggleMobile');
+  const panel = document.getElementById('sPanel');
+  const input = document.getElementById('searchInput');
+  const wrap = document.getElementById('searchWrap');
+
+  if (hbMobile) hbMobile.addEventListener('click', openDrawer);
+  if (!btnMobile || !panel) return;
+
+  const originalParent = panel.parentElement;
+  let floating = false;
+
+  const isMobile = () => window.matchMedia('(max-width:980px)').matches;
+
+  function openSearch(){
+    // Si el contenedor está oculto en móvil, “desacoplamos” el panel
+    if (isMobile() && wrap && getComputedStyle(wrap).display === 'none') {
+      document.body.appendChild(panel);
+      Object.assign(panel.style, {
+        position: 'fixed',
+        left: '12px',
+        right: '12px',
+        top: 'calc(var(--topbar-h) + 56px)',
+        width: 'auto',
+        zIndex: '9999'
+      });
+      floating = true;
+    }
+    panel.classList.add('show');
+    input && input.focus({preventScroll:true});
+  }
+
+  function closeSearch(){
+    panel.classList.remove('show');
+    if (floating) {
+      originalParent.appendChild(panel);
+      panel.removeAttribute('style');
+      floating = false;
+    }
+  }
+
+  // Toggle desde la lupita
+  btnMobile.addEventListener('click', (e) => {
+    e.stopPropagation();
+    panel.classList.contains('show') ? closeSearch() : openSearch();
+  });
+
+  // Cerrar tocando fuera
+  document.addEventListener('click', (e) => {
+    if (!panel.classList.contains('show')) return;
+    if (panel.contains(e.target) || e.target === btnMobile) return;
+    closeSearch();
+  });
+
+  // Cerrar con Escape
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && panel.classList.contains('show')) closeSearch();
+  });
+
+  // Si cambias de tamaño (rotación/tablet), sanea estado
+  window.addEventListener('resize', () => {
+    if (!panel.classList.contains('show')) return;
+    if (!isMobile() && floating) closeSearch();
+  });
+})();
 
 /* acordeones del drawer */
 document.querySelectorAll('.mitem[data-acc]').forEach(btn=>{
