@@ -929,5 +929,114 @@ function onRoute(){
 window.addEventListener('hashchange', onRoute);
 onRoute();
 </script>
+  <script>
+// ========== LUPA MÓVIL (funciona aunque .searchwrap esté oculto en mobile) ==========
+(() => {
+  const btn = document.getElementById('sToggleMobile');
+  const panel = document.getElementById('sPanel');
+  const input = document.getElementById('searchInput');
+  const searchWrap = document.getElementById('searchWrap');
+
+  if (!btn || !panel) return;
+
+  // Guardamos dónde vivía originalmente el panel para poder regresarlo
+  const original = { parent: panel.parentElement, next: panel.nextSibling };
+  let portaled = false;
+
+  const isMobile = () => window.matchMedia('(max-width: 980px)').matches;
+
+  function portalToBody() {
+    if (portaled) return;
+    // Si el contenedor está oculto en mobile (display:none), sacamos el panel al <body>
+    if (isMobile() && (searchWrap?.offsetParent === null)) {
+      document.body.appendChild(panel);
+      Object.assign(panel.style, {
+        position: 'fixed',
+        left: '12px',
+        right: '12px',
+        top: 'calc(var(--topbar-h) + 8px)',
+        width: 'auto',
+        zIndex: '9999'
+      });
+      portaled = true;
+    }
+  }
+
+  function restoreToOrigin() {
+    if (!portaled) return;
+    // Volver a su lugar original
+    if (original.next) original.parent.insertBefore(panel, original.next);
+    else original.parent.appendChild(panel);
+    panel.style.position = '';
+    panel.style.left = '';
+    panel.style.right = '';
+    panel.style.top = '';
+    panel.style.width = '';
+    panel.style.zIndex = '';
+    portaled = false;
+  }
+
+  function openPanel() {
+    portalToBody();
+    panel.classList.add('show');
+    input?.focus({ preventScroll: true });
+    // Evita que clics dentro cierren el panel
+    panel.addEventListener('click', stop, { once: true });
+  }
+
+  function closePanel() {
+    panel.classList.remove('show');
+    restoreToOrigin();
+  }
+
+  function togglePanel() {
+    const willOpen = !panel.classList.contains('show');
+    willOpen ? openPanel() : closePanel();
+  }
+
+  function stop(e){ e.stopPropagation(); }
+
+  // Abrir/cerrar desde la lupita móvil
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    togglePanel();
+  });
+
+  // Cerrar al tocar fuera
+  document.addEventListener('click', (e) => {
+    if (!panel.classList.contains('show')) return;
+    const clickedInside = panel.contains(e.target) || e.target === btn;
+    if (!clickedInside) closePanel();
+  });
+
+  // Cerrar con Escape
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closePanel();
+  });
+
+  // Si cambia el tamaño (rotación o pasar a desktop), acomodamos el panel
+  window.addEventListener('resize', () => {
+    if (!panel.classList.contains('show')) {
+      // Si no está abierto, igual restauramos si quedó portaled
+      if (!isMobile()) restoreToOrigin();
+      return;
+    }
+    // Si está abierto y ahora estamos en desktop, devolver al origen para usar estilos de desktop
+    if (!isMobile()) {
+      restoreToOrigin();
+      // Mantenerlo abierto pero en su lugar original
+      panel.classList.add('show');
+    } else {
+      // Seguimos en mobile: aseguramos que esté portaled y bien posicionado
+      portalToBody();
+    }
+  });
+
+  // Cerrar si cambia de ruta (para evitar panel flotante)
+  window.addEventListener('hashchange', closePanel);
+})();
+</script>
+
 </body>
 </html>
