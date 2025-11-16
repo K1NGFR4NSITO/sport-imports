@@ -529,6 +529,98 @@
       </div>
     </div>
 
+    <div class="producto" data-brand="gymshark" data-wa="59170661091">
+      <img src="cresthoodie.jpeg" data-img alt="Crest Hoodie">
+      <div class="p-info">
+        <div class="p-titulo">Crest Hoodie</div>
+        <div class="price">Bs 880</div>
+        <div class="p-desc" hidden>Secado rápido y ajuste atlético.</div>
+        <div class="variantes">
+          <button class="var selected" style="background:#000000" data-img="cresthoodie.jpeg" aria-label="Gris"></button>
+        </div>
+        <div class="tallas">
+          <button class="talla selected">S</button><button class="talla">M</button><button class="talla">L</button><button class="talla">XL</button><button class="talla">XXL</button>
+        </div>
+      </div>
+      <div class="gallery" hidden>
+        <img src="cresthoodie.jpeg" alt="">
+          <img src="cresthoodieback.jpeg" alt="">
+
+      </div>
+    </div>
+
+        <div class="producto" data-brand="gymshark" data-wa="59170661091">
+      <img src="global.jpeg" data-img alt="Global Lifting Oversized Joggers">
+      <div class="p-info">
+        <div class="p-titulo">Global Lifting Oversized Joggers</div>
+        <div class="price">Bs 950</div>
+        <div class="p-desc" hidden>Cintura ajustable con cordon. Bolsillos para guardar tus cosas. Ideal para usar dentro o fuera del gimnasio</div>
+        <div class="variantes">
+          <button class="var selected" style="background:#000000" data-img="global.jpeg" aria-label="Gris"></button>
+        </div>
+        <div class="tallas">
+          <button class="talla selected">S</button><button class="talla">M</button><button class="talla">L</button><button class="talla">XL</button><button class="talla">XXL</button>
+        </div>
+      </div>
+      <div class="gallery" hidden>
+        <img src="global.jpeg" alt="">
+                <img src="globalback.jpeg" alt="">
+
+      </div>
+    </div>
+
+        <div class="producto" data-brand="gymshark" data-wa="59170661091">
+      <img src="powerblack.jpeg" data-img alt="Power T-shirt">
+      <div class="p-info">
+        <div class="p-titulo">Power T-shirt</div>
+        <div class="price">Bs 850</div>
+        <div class="p-desc" hidden>Silueta oversize y robusta. El iconico estampado Gymashark estiliza tu espalda. 99% algodon, 5% elastano</div>
+        <div class="variantes">
+          <button class="var selected" style="background:#000000" data-img="powerblack.jpeg" aria-label="Gris"></button>
+          <button class="var" style="background:#f30505" data-img="powerred.jpeg"></button>
+          <button class="var" style="background:#16bcbc" data-img="powerceleste.jpeg"></button>
+          <button class="var" style="background:#bbbbbb" data-img="powergray.jpeg"></button>
+          <button class="var" style="background:#2bbe72" data-img="powergreen.jpeg"></button>
+                    <button class="var" style="background:#ffffff" data-img="powerwhite.jpeg"></button>
+                              <button class="var" style="background:#414141" data-img="powergraydark.jpeg"></button>
+        </div>
+        <div class="tallas">
+          <button class="talla selected">S</button><button class="talla">M</button><button class="talla">L</button><button class="talla">XL</button><button class="talla">XXL</button>
+        </div>
+      </div>
+      <div class="gallery" hidden>
+        <img src="powerblack.jpeg" alt="">
+        <img src="powerblackfront.jpeg" alt="">
+        <img src="powerred.jpeg" alt="">
+        <img src="powerceleste.jpeg" alt="">
+        <img src="powergray.jpeg" alt="">
+        <img src="powergreen.jpeg" alt="">
+        <img src="powerwhite.jpeg" alt="">
+        <img src="powergraydark.jpeg" alt="">
+      </div>
+    </div>
+
+    <div class="producto" data-brand="gymshark" data-wa="59170661091">
+      <img src="shadowseamless.jpeg" data-img alt="Shadow Seamless Hoodie">
+      <div class="p-info">
+        <div class="p-titulo">Shadow Seamless Hoodie</div>
+        <div class="price">Bs 1050</div>
+        <div class="p-desc" hidden>• Diseño jacquard tonal que realza la figura
+• Dobladillos acanalados para mayor comodidad
+• Estructura sin costuras para una total libertad de movimiento
+• Sensación premium para un entrenamiento superior
+• Capucha cruzada ligera
+100% NYLON</div>
+        <div class="variantes"><button class="var selected" style="background:#000" data-img="shadowseamless.jpeg" aria-label="Negro"></button></div>
+        <div class="tallas">
+          <button class="talla agotada">S</button><button class="talla agotada">M</button><button class="talla selected">L</button><button class="talla agotada">XL</button><button class="talla agotada">XXL</button>
+        </div>
+      </div>
+      <div class="gallery" hidden><img src="shadowseamless.jpeg" alt=""></div>
+      <div class="gallery" hidden><img src="shadowseamlessback.jpeg" alt=""></div>
+    </div>
+
+
     <div id="emptyFavs" class="empty-favs" hidden>
       Aún no tienes favoritos. Entra a un producto y pulsa “Añadir a favoritos”.
     </div>
@@ -824,7 +916,14 @@ function showHome(){
   applyFilters();
   window.scrollTo(0,0);
 }
-brandHome.addEventListener('click', (e)=>{ e.preventDefault(); location.hash = ''; });
+brandHome.addEventListener('click', (e)=>{
+  e.preventDefault();
+  // Forzar siempre la vista HOME
+  brandFilter = null;
+  searchInput.value = "";
+  location.hash = "";
+  showHome();
+});
 
 function showFavorites(){
   stickyBar.hidden = true;
