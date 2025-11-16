@@ -9,6 +9,7 @@
   :root{ --bg:#ffffff; --ink:#111111; --muted:#777; --line:#eaeaea; --accent:#FF9F1C; --topbar-h:72px; --danger:#d60000; --pill:#f1f1f1; }
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink)}
+  [hidden]{ display:none !important; }
 
   /* ===== TOPBAR ===== */
   .topbar{position:sticky; top:0; z-index:70; height:var(--topbar-h); background:var(--accent); display:flex; align-items:center; gap:14px; padding:0 16px; box-shadow:0 2px 0 rgba(0,0,0,.04)}
@@ -16,7 +17,7 @@
   .hamburger{width:38px; height:32px; border:none; background:transparent; cursor:pointer; display:none}
   .hamburger span{display:block;height:3px;background:#111;margin:6px 0;border-radius:2px;transition:.25s}
 
-  /* ===== SEARCH on TOPBAR ===== */
+  /* ===== SEARCH (desktop) ===== */
   .searchwrap{margin-left:auto; position:relative}
   .s-toggle{display:inline-flex; align-items:center; gap:8px; border:none; background:#0000; cursor:pointer; font-weight:800}
   .s-toggle .loupe{width:22px; height:22px; display:inline-grid; place-items:center; border-radius:999px; background:#00000014}
@@ -28,24 +29,39 @@
   .s-clear{position:absolute; right:8px; top:50%; transform:translateY(-50%); width:28px; height:28px; border-radius:999px; border:1px solid var(--line); background:#fff; cursor:pointer; font-weight:900; color:#666; display:none}
   .s-input:not(:placeholder-shown) ~ .s-clear{display:inline-grid; place-items:center}
 
-  /* ===== BOTÓN FAVORITOS EN TOPBAR ===== */
+  /* ===== FAVORITOS (desktop) ===== */
   .fav-btn{
-    margin-left:12px;
-    display:inline-flex; align-items:center; gap:8px;
+    margin-left:12px; display:inline-flex; align-items:center; gap:8px;
     background:#fff; color:#111; border:1px solid var(--line);
     height:38px; padding:0 14px; border-radius:999px; font-weight:800;
     cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,.06);
   }
   .fav-btn:hover{ filter:brightness(.98) }
-  .fav-count{
-    display:inline-grid; place-items:center;
-    min-width:22px; height:22px; padding:0 6px;
-    background:#111; color:#fff; border-radius:999px; font-size:12px; font-weight:900;
+  .fav-count{display:inline-grid; place-items:center; min-width:22px; height:22px; padding:0 6px; background:#111; color:#fff; border-radius:999px; font-size:12px; font-weight:900;}
+
+  /* ===== SUB-BARRA MÓVIL (bajo la amarilla) ===== */
+  .mobilebar{
+    display:none; position:sticky; top:var(--topbar-h); z-index:69;
+    background:#fff; border-bottom:1px solid var(--line);
+    padding:8px 12px; gap:10px; align-items:center; justify-content:space-between;
+  }
+  .mobilebar .left{display:flex; align-items:center; gap:10px}
+  .icon-btn{
+    height:38px; padding:0 14px; border-radius:999px; border:1px solid var(--line);
+    background:#fff; font-weight:800; display:inline-flex; align-items:center; gap:8px; cursor:pointer;
+  }
+  .icon-pill{width:38px; height:38px; display:grid; place-items:center; border-radius:999px; border:1px solid var(--line); background:#fff; font-weight:900;}
+
+  /* Ocultar herramientas de topbar en móvil; usar la sub-barra */
+  @media (max-width:980px){
+    .hamburger{display:none} /* el de topbar ya no se usa */
+    .searchwrap, #favBtn{ display:none; }
+    .mobilebar{ display:flex; }
   }
 
   /* ===== NAV DESKTOP ===== */
-  .navwrap{position:sticky; top:var(--topbar-h); z-index:50; background:#fff; border-bottom:1px solid var(--line); display:flex; justify-content:center}
-  nav{display:flex; gap:28px; padding:14px 20px}
+  .navwrap{position:sticky; top:calc(var(--topbar-h) + 48px); z-index:50; background:#fff; border-bottom:1px solid var(--line); display:flex; justify-content:center}
+  nav{display:flex; gap:28px; padding:14px 20px; max-width:1200px; margin:0 auto;}
   nav>.nav-item{position:relative; padding-bottom:10px}
   nav>.nav-item>button{background:none;border:none;cursor:pointer;font-weight:700;font-size:15px;color:var(--ink);padding:8px 10px;border-radius:8px;transition:.15s}
   nav>.nav-item>button:hover{color:var(--accent);background:rgba(255,159,28,.10)}
@@ -55,11 +71,12 @@
   .mega h4{font-size:13px;color:#999;text-transform:uppercase;margin-bottom:10px}
   .mega a{display:block;color:var(--ink);text-decoration:none;padding:7px 8px;border-radius:8px;font-weight:600;font-size:14px}
   .mega a:hover{background:var(--accent);color:#fff}
+  @media (max-width:980px){ .navwrap{display:none} }
 
   /* ===== HERO ===== */
   .hero{position:relative;overflow:hidden}
   .slides{display:flex;transition:transform .6s ease}
-  .slide{min-width:100vw;height:62vh;display:flex;align-items:center;justify-content:center;position:relative}
+  .slide{min-width:100vw; height:min(78vh,740px); display:flex; align-items:center; justify-content:center; position:relative}
   .slide::before{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.2))}
   .slide img{width:100%;height:100%;object-fit:cover}
   .cta{position:absolute;z-index:2;display:flex;flex-direction:column;align-items:center;gap:14px}
@@ -70,16 +87,21 @@
   .dots{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;display:flex;gap:8px;z-index:2}
   .dot{width:9px;height:9px;border-radius:50%;background:#fff7;border:1px solid #fff;cursor:pointer}
   .dot.active{background:#fff}
+  @media (max-width:980px){ .slide{height:62vh} }
+  @media (max-width:560px){ .slide{height:56vh} .cta h2{font-size:34px} .cta a{padding:12px 22px; border-radius:12px} }
+  @media (max-width:480px){ .s-toggle span:last-child{display:none} .brand{font-size:18px} }
 
   /* ===== GRID ===== */
-  .producto-grid{padding:50px 5%}
+  .producto-grid{padding:50px 4%; max-width:1200px; margin:0 auto;}
   .producto-grid h3{text-align:center;font-size:30px;font-weight:900;margin-bottom:22px}
-  .producto-lista{display:grid;gap:24px;grid-template-columns:repeat(4,1fr)}
+  .producto-lista{display:grid;gap:16px;grid-template-columns:repeat(2,minmax(0,1fr))}
+  @media (min-width:768px){ .producto-lista{gap:20px;grid-template-columns:repeat(3,minmax(0,1fr))} }
+  @media (min-width:1100px){ .producto-lista{gap:22px;grid-template-columns:repeat(4,minmax(0,1fr))} }
   .producto{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.25s;cursor:pointer; position:relative}
-  .producto:hover{transform:scale(1.02);box-shadow:0 12px 26px rgba(0,0,0,.12)}
-  .producto img{width:100%;height:260px;object-fit:cover;display:block}
+  .producto:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,0,0,.12)}
+  .producto img{width:100%; aspect-ratio:4/5; height:auto; object-fit:cover; display:block}
   .p-info{padding:14px 16px}
-  .p-titulo{font-weight:700;font-size:17px}
+  .p-titulo{font-weight:800;font-size:14px; line-height:1.25}
   .variantes{display:flex;gap:8px;margin-top:12px}
   .var{width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid #fff;outline:1px solid #ccc;transition:transform .1s;position:relative}
   .var:hover{transform:scale(1.2)} .var.selected{outline:2px solid #111}
@@ -89,22 +111,16 @@
   .talla.selected{border-color:#111;box-shadow:0 0 0 2px #1112}
   .talla.agotada{opacity:.35;pointer-events:none; position:relative}
   .talla.agotada::after{content:"✕"; position:absolute; inset:0; display:grid; place-items:center; color:var(--danger); font-weight:900}
-
   :is(.card, .producto).agotado img{filter:grayscale(100%) brightness(62%)}
   :is(.card, .producto) .agotado-badge{position:absolute; top:12px; left:12px; background:var(--danger); color:#fff; font-weight:900; padding:6px 12px; border-radius:10px; font-size:13px; letter-spacing:.5px; z-index:3; display:none; box-shadow:0 6px 14px rgba(0,0,0,.18)}
   :is(.card, .producto).agotado .agotado-badge{display:inline-block}
   :is(.card, .producto).agotado{pointer-events:none; cursor:not-allowed}
-
-  /* Marca visual si una card es favorita */
-  .producto.fav::after{
-    content:"★"; position:absolute; top:10px; right:12px;
-    font-weight:900; font-size:18px; color:#FFB703; text-shadow:0 1px 0 #0003;
-  }
+  .producto.fav::after{content:"★"; position:absolute; top:10px; right:12px; font-weight:900; font-size:18px; color:#FFB703; text-shadow:0 1px 0 #0003;}
 
   /* ===== DRAWER ===== */
-  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:.25s;z-index:65}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:.25s;z-index:90}
   .overlay.show{opacity:1;pointer-events:auto}
-  .drawer{position:fixed;left:0;top:0;bottom:0;width:84vw;max-width:380px;background:#121212;color:#fff; transform:translateX(-100%);transition:transform .3s ease;z-index:80;display:flex;flex-direction:column}
+  .drawer{position:fixed;left:0;top:0;bottom:0;width:84vw;max-width:380px;background:#121212;color:#fff; transform:translateX(-100%);transition:transform .3s ease;z-index:95;display:flex;flex-direction:column}
   .drawer.show{transform:translateX(0)}
   .drawer header{display:flex;align-items:center;justify-content:space-between;padding:18px 16px;border-bottom:1px solid #222}
   .drawer .title{font-weight:900;letter-spacing:2px}
@@ -120,55 +136,20 @@
   .panel a:hover{background:#1b1b1b;color:#fff}
   .no-scroll{overflow:hidden}
 
-  @media (max-width:1180px){ .producto-lista{grid-template-columns:repeat(3,1fr)} }
-  @media (max-width:980px){
-    .hamburger{display:block}
-    .brand{font-size:20px}
-    .navwrap{display:none}
-    .producto-lista{grid-template-columns:repeat(2,1fr)}
-  }
-  @media (max-width:560px){
-    .producto-lista{grid-template-columns:1fr}
-  }
-
-  /* ===== PDP (PÁGINA DE PRODUCTO) ===== */
-  .pdp{display:none; padding:28px 5%}
+  /* ===== PDP ===== */
+  .pdp{display:none; padding:28px 5%; max-width:1200px; margin:0 auto;}
   .pdp.show{display:block}
   .pdp-grid{display:grid; grid-template-columns:1.2fr .8fr; gap:28px}
   @media (max-width:980px){ .pdp-grid{grid-template-columns:1fr} }
-
-  /* Galería */
   .pdp-gallery{display:grid; grid-template-columns:120px 1fr; gap:14px; align-items:start}
   @media (max-width:560px){ .pdp-gallery{grid-template-columns:1fr} }
-
-  /* ===== IMAGEN PRINCIPAL ===== */
-  .pdp-main{
-    width:100%;
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:12px;
-    display:flex; align-items:center; justify-content:center;
-    padding:10px; overflow:hidden;
-  }
+  .pdp-main{width:100%; background:#fff; border:1px solid var(--line); border-radius:12px; display:flex; align-items:center; justify-content:center; padding:10px; overflow:hidden;}
   .pdp-main img{ width:70%; height:auto; object-fit:contain }
-
-  /* ===== THUMBS ===== */
   .pdp-thumbs{ display:flex; flex-direction:column; gap:12px; padding-right:8px }
-  .pdp-thumb{
-    width:70%; aspect-ratio:1/1; border:1px solid var(--line); border-radius:12px;
-    overflow:hidden; cursor:pointer; display:flex; align-items:center; justify-content:center;
-  }
+  .pdp-thumb{width:86px; aspect-ratio:1/1; border:1px solid var(--line); border-radius:12px; overflow:hidden; cursor:pointer; display:flex; align-items:center; justify-content:center;}
   .pdp-thumb img{ width:100%; height:100%; object-fit:cover }
-  @media (max-width:560px){
-    .pdp-thumbs{ order:2; flex-direction:row; overflow-x:auto }
-    .pdp-thumb{ width:76px; aspect-ratio:1/1; flex-shrink:0 }
-  }
-
-  .footer-bar{
-    background:#000; color:#fff; padding:22px 5%; text-align:center;
-    font-weight:600; font-size:15px; letter-spacing:0.3px;
-  }
-
+  @media (max-width:560px){ .pdp-thumbs{ order:2; flex-direction:row; overflow-x:auto } .pdp-thumb{ width:76px; flex-shrink:0 } }
+  .footer-bar{background:#000; color:#fff; padding:22px 5%; text-align:center; font-weight:600; font-size:15px; letter-spacing:0.3px;}
   .pdp-title{font-size:26px; font-weight:900; margin-bottom:6px}
   .pdp-price{font-weight:900;margin:6px 0 12px;font-size:20px}
   .pdp-desc{font-size:14px; color:#444; line-height:1.55; margin:0 0 16px}
@@ -179,42 +160,25 @@
   .btn-buy:hover{filter:brightness(.95)}
   .btn-outline{background:#fff}
 
-  /* Barra sticky en mobile */
   .pdp-sticky{display:none}
   @media (max-width:680px){
-    .pdp-sticky{
-      position:fixed; left:0; right:0; bottom:0; z-index:60;
-      background:#fff; border-top:1px solid var(--line);
-      padding:10px 12px; display:flex; align-items:center; justify-content:space-between; gap:10px;
-    }
-    body.has-sticky{padding-bottom:68px}
+    .pdp-sticky{position:fixed; left:0; right:0; bottom:0; z-index:60; background:#fff; border-top:1px solid var(--line); padding:10px 12px; display:flex; align-items:center; justify-content:space-between; gap:10px;}
+    body.in-pdp{padding-bottom:68px}
     .pdp-sticky .price{font-weight:900}
     .pdp-sticky .btn-buy{padding:12px 18px}
   }
 
-  /* ===== FRANJA NEGRA INFERIOR ===== */
   .bottom-strip{position:fixed; left:0; right:0; bottom:0; height:10px; background:#000; z-index:10}
-
-  /* Mensaje de vacíos (favoritos) */
-  .empty-favs{
-    grid-column:1/-1;
-    padding:40px;
-    text-align:center;
-    color:#666;
-    font-weight:600;
-  }
+  .empty-favs{grid-column:1/-1; padding:40px; text-align:center; color:#666; font-weight:600;}
 </style>
 </head>
 <body>
 
 <!-- TOPBAR -->
 <header class="topbar">
-  <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-controls="drawer" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
   <div class="brand" id="brandHome" style="cursor:pointer">SPORT IMPORTS</div>
 
-  <!-- Search compact -->
+  <!-- Search (desktop) -->
   <div class="searchwrap" id="searchWrap">
     <button class="s-toggle" id="sToggle" aria-expanded="false" aria-controls="sPanel">
       <span class="loupe">🔎</span> <span style="font-weight:800">Buscar</span>
@@ -235,11 +199,20 @@
     </div>
   </div>
 
-  <!-- Botón Favoritos -->
+  <!-- Favoritos (desktop) -->
   <button id="favBtn" class="fav-btn" aria-pressed="false" title="Ver favoritos">
     ★ Favoritos <span id="favCount" class="fav-count">0</span>
   </button>
 </header>
+
+<!-- SUB-BARRA MÓVIL -->
+<div class="mobilebar">
+  <div class="left">
+    <button class="icon-pill" id="hbMobile" aria-label="Abrir menú">☰</button>
+    <button class="icon-pill" id="sToggleMobile" aria-label="Buscar">🔎</button>
+  </div>
+  <button class="icon-btn" id="favBtnMobile" aria-label="Favoritos">★ Favoritos <span id="favCountMobile" class="fav-count" style="margin-left:8px">0</span></button>
+</div>
 
 <!-- NAV DESKTOP -->
 <div class="navwrap" id="navwrap">
@@ -258,7 +231,7 @@
           </div>
           <div>
             <h4>Novedades</h4>
-            <a href="#" data-search="new drop">New Drop</a>
+            <a href="#" data-search="nuevo lanzamiento">Nuevo lanzamiento</a>
             <a href="#" data-search="best sellers">Best Sellers</a>
             <a href="#" data-search="restock">Restock</a>
           </div>
@@ -282,7 +255,9 @@
           </div>
           <div>
             <h4>Destacados</h4>
-            <a href="#" data-search="preview">Preview New Drop</a><a href="#" data-search="new drop">New Drop</a><a href="#" data-search="best">Best Sellers</a>
+            <a href="#" data-search="preview">Preview Nuevo lanzamiento</a>
+            <a href="#" data-search="nuevo lanzamiento">Nuevo lanzamiento</a>
+            <a href="#" data-search="best">Best Sellers</a>
             <a href="#" data-search="sale">SALE <span class="badge">% OFF</span></a>
           </div>
           <div>
@@ -305,7 +280,9 @@
           </div>
           <div>
             <h4>Destacados</h4>
-            <a href="#" data-search="preview">Preview New Drop</a><a href="#" data-search="new drop">New Drop</a><a href="#" data-search="best">Best Sellers</a>
+            <a href="#" data-search="preview">Preview Nuevo lanzamiento</a>
+            <a href="#" data-search="nuevo lanzamiento">Nuevo lanzamiento</a>
+            <a href="#" data-search="best">Best Sellers</a>
             <a href="#" data-search="sale">SALE <span class="badge">% OFF</span></a>
           </div>
           <div>
@@ -335,7 +312,7 @@
       <a href="#" data-filter-brand="rawgear">Raw Gear</a>
     </div>
 
-    <a class="mitem" href="#" data-search="new drop"><span>NEW DROP</span><small>Últimos lanzamientos</small></a>
+    <a class="mitem" href="#" data-search="nuevo lanzamiento"><span>NUEVO LANZAMIENTO</span><small>Últimos lanzamientos</small></a>
 
     <button class="mitem" data-acc="hombre"><span>PARA HOMBRE</span><span class="chev">›</span></button>
     <div class="panel" id="acc-hombre">
@@ -354,7 +331,7 @@
   <div class="slides" id="slides">
     <div class="slide">
       <img src="https://images.unsplash.com/photo-1593032457860-608e983f24be?auto=format&fit=crop&w=1920&q=80" alt="">
-      <div class="cta"><h2>NUEVO DROP</h2><a href="#">SHOP NOW</a></div>
+      <div class="cta"><h2>NUEVO LANZAMIENTO</h2><a href="#">SHOP NOW</a></div>
     </div>
     <div class="slide">
       <img src="https://images.unsplash.com/photo-1571907480495-3b1618f1172b?auto=format&fit=crop&w=1920&q=80" alt="">
@@ -375,7 +352,6 @@
   <h3 id="gridTitle">Novedades</h3>
 
   <div class="producto-lista">
-
     <!-- ===== GYMSHARK ===== -->
     <div class="producto" data-brand="gymshark" data-wa="59170661091">
       <img src="g1.jpeg" data-img alt="Oversize Tee gris">
@@ -527,7 +503,6 @@
       </div>
     </div>
 
-    <!-- EL REGISTRO QUE PEDISTE -->
     <div class="producto" data-brand="youngla" data-wa="59170661091">
       <img src="supermangraphictees1.jpeg" data-img alt="Superman Graphic Tees - 4044">
       <div class="p-info">
@@ -554,15 +529,13 @@
       </div>
     </div>
 
-    <!-- Mensaje vacío Favoritos -->
     <div id="emptyFavs" class="empty-favs" hidden>
       Aún no tienes favoritos. Entra a un producto y pulsa “Añadir a favoritos”.
     </div>
-
   </div>
 </section>
 
-<!-- PDP (vista de producto) -->
+<!-- PDP -->
 <main id="pdp" class="pdp" aria-live="polite"></main>
 <div id="pdpSticky" class="pdp-sticky" hidden>
   <div class="price" id="stickyPrice">Bs 0</div>
@@ -573,7 +546,6 @@
   SPORT IMPORTS © 2025 — Todos los derechos reservados
 </footer>
 
-<!-- FRANJA NEGRA INFERIOR -->
 <div class="bottom-strip" aria-hidden="true"></div>
 
 <!-- CAROUSEL HERO -->
@@ -591,7 +563,7 @@ document.getElementById('prev').onclick=()=>go(index-1,true);
 renderDots();restart();
 </script>
 
-<!-- HOVER NAV -->
+<!-- HOVER NAV (desktop) -->
 <script>
 (function(){
   const navwrap=document.getElementById('navwrap'); if(!navwrap) return;
@@ -610,16 +582,85 @@ renderDots();restart();
 })();
 </script>
 
-<!-- APP: LISTA + PDP (router hash) -->
+<!-- APP -->
 <script>
 /* Drawer */
-const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay'), hb=document.getElementById('hamburger'), dClose=document.getElementById('dClose');
-function openDrawer(){ drawer.classList.add('show');overlay.classList.add('show');document.body.classList.add('no-scroll');hb?.setAttribute('aria-expanded','true');}
-function closeDrawer(){ drawer.classList.remove('show');overlay.classList.remove('show');document.body.classList.remove('no-scroll');hb?.setAttribute('aria-expanded','false');}
-hb?.addEventListener('click',openDrawer); dClose?.addEventListener('click',closeDrawer); overlay?.addEventListener('click',closeDrawer);
+const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+const dClose=document.getElementById('dClose');
+function openDrawer(){ drawer.classList.add('show');overlay.classList.add('show');document.body.classList.add('no-scroll');}
+function closeDrawer(){ drawer.classList.remove('show');overlay.classList.remove('show');document.body.classList.remove('no-scroll');}
+dClose?.addEventListener('click',closeDrawer); overlay?.addEventListener('click',closeDrawer);
 window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();}});
 
-/* acordeones */
+/* Sub-barra móvil eventos — FIX buscador móvil */
+(function(){
+  const hbMobile = document.getElementById('hbMobile');
+  const btnMobile = document.getElementById('sToggleMobile');
+  const panel = document.getElementById('sPanel');
+  const input = document.getElementById('searchInput');
+  const wrap = document.getElementById('searchWrap');
+
+  if (hbMobile) hbMobile.addEventListener('click', openDrawer);
+  if (!btnMobile || !panel) return;
+
+  const originalParent = panel.parentElement;
+  let floating = false;
+
+  const isMobile = () => window.matchMedia('(max-width:980px)').matches;
+
+  function openSearch(){
+    // Si el contenedor está oculto en móvil, “desacoplamos” el panel
+    if (isMobile() && wrap && getComputedStyle(wrap).display === 'none') {
+      document.body.appendChild(panel);
+      Object.assign(panel.style, {
+        position: 'fixed',
+        left: '12px',
+        right: '12px',
+        top: 'calc(var(--topbar-h) + 56px)',
+        width: 'auto',
+        zIndex: '9999'
+      });
+      floating = true;
+    }
+    panel.classList.add('show');
+    input && input.focus({preventScroll:true});
+  }
+
+  function closeSearch(){
+    panel.classList.remove('show');
+    if (floating) {
+      originalParent.appendChild(panel);
+      panel.removeAttribute('style');
+      floating = false;
+    }
+  }
+
+  // Toggle desde la lupita
+  btnMobile.addEventListener('click', (e) => {
+    e.stopPropagation();
+    panel.classList.contains('show') ? closeSearch() : openSearch();
+  });
+
+  // Cerrar tocando fuera
+  document.addEventListener('click', (e) => {
+    if (!panel.classList.contains('show')) return;
+    if (panel.contains(e.target) || e.target === btnMobile) return;
+    closeSearch();
+  });
+
+  // Cerrar con Escape
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && panel.classList.contains('show')) closeSearch();
+  });
+
+  // Si cambias de tamaño (rotación/tablet), sanea estado
+  window.addEventListener('resize', () => {
+    if (!panel.classList.contains('show')) return;
+    if (!isMobile() && floating) closeSearch();
+  });
+})();
+
+/* acordeones del drawer */
 document.querySelectorAll('.mitem[data-acc]').forEach(btn=>{
   const id='acc-'+btn.dataset.acc; const panel=document.getElementById(id);
   btn.addEventListener('click',()=>{
@@ -691,10 +732,9 @@ function applyFilters(){
   reorderVisible();
 }
 
-sToggle.addEventListener('click', ()=>{
+sToggle?.addEventListener('click', ()=>{
   const open = !sPanel.classList.contains('show');
   sPanel.classList.toggle('show', open);
-  sToggle.setAttribute('aria-expanded', open ? 'true':'false');
   if(open) searchInput.focus();
 });
 searchInput.addEventListener('input', applyFilters);
@@ -729,10 +769,13 @@ const brandHome = document.getElementById('brandHome');
 
 const FAVORITES_KEY = "favoritosSportImports";
 const favBtn = document.getElementById('favBtn');
+const favBtnMobile = document.getElementById('favBtnMobile');
 const favCount = document.getElementById('favCount');
+const favCountMobile = document.getElementById('favCountMobile');
+
 function getFavs(){ try{return JSON.parse(localStorage.getItem(FAVORITES_KEY)||"[]");}catch(e){return [];} }
 function saveFavs(arr){ localStorage.setItem(FAVORITES_KEY, JSON.stringify(arr)); }
-function updateFavCount(){ favCount.textContent = getFavs().length; }
+function updateFavCount(){ const n=getFavs().length; favCount.textContent=n; favCountMobile.textContent=n; }
 
 function slugify(t){ return (t||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
 
@@ -741,11 +784,10 @@ const productIndex = new Map();
 let autoId = 0;
 document.querySelectorAll('.producto').forEach(card=>{
   const title = card.querySelector('.p-titulo')?.textContent.trim() || 'Producto';
-  const brand = card.dataset.brand || '';
+  const theBrand = card.dataset.brand || '';
   const img = card.querySelector('[data-img]')?.getAttribute('src') || '';
   const imgBase = img.split('/').pop()?.split('.')[0] || '';
-  // Título + marca + imagen principal + índice => slug único
-  const slug = slugify(`${title}-${brand}-${imgBase}-${autoId++}`);
+  const slug = slugify(`${title}-${theBrand}-${imgBase}-${autoId++}`);
   productIndex.set(slug, card);
   card.dataset.slug = slug;
 });
@@ -759,7 +801,7 @@ document.querySelectorAll('.producto').forEach(card=>{
   updateFavCount();
 })();
 
-/* Navegación desde cards (usa el slug único) */
+/* Navegación desde cards */
 document.querySelectorAll('.producto:not(.agotado)').forEach(card=>{
   card.addEventListener('click', e=>{
     if(e.target.closest('.var') || e.target.closest('.talla')) return;
@@ -770,11 +812,11 @@ document.querySelectorAll('.producto:not(.agotado)').forEach(card=>{
 /* Vistas */
 function showHome(){
   stickyBar.hidden = true;
-  document.body.classList.remove('has-sticky');
+  document.body.classList.remove('has-sticky','in-pdp');
   brandFilter = null;
   if (searchInput) searchInput.value = '';
-  sPanel?.classList.remove('show');
-  hero.style.display = '';
+  document.getElementById('sPanel')?.classList.remove('show');
+  document.getElementById('hero').style.display = '';
   grid.style.display = 'block';
   gridTitle.textContent = 'Novedades';
   document.querySelectorAll('.producto').forEach(c=> c.style.display = '');
@@ -786,9 +828,9 @@ brandHome.addEventListener('click', (e)=>{ e.preventDefault(); location.hash = '
 
 function showFavorites(){
   stickyBar.hidden = true;
-  document.body.classList.remove('has-sticky');
+  document.body.classList.remove('has-sticky','in-pdp');
   const favs = new Set(getFavs());
-  hero.style.display = 'none';
+  document.getElementById('hero').style.display = 'none';
   grid.style.display = 'block';
   gridTitle.textContent = 'Favoritos';
   let any=false;
@@ -801,8 +843,9 @@ function showFavorites(){
   if (empty) empty.hidden = any;
 }
 
-/* Un solo click: ir a #/favorites */
+/* Clicks a favoritos */
 favBtn?.addEventListener('click', ()=>{ location.hash = '#/favorites'; });
+favBtnMobile?.addEventListener('click', ()=>{ location.hash = '#/favorites'; });
 
 /* Utilidades PDP */
 function collectImages(card){
@@ -821,6 +864,7 @@ function renderPDPFromCard(card){
   const images = collectImages(card);
   const wa = card.dataset.wa || WHATSAPP_NUMBER;
 
+  const pdp = document.getElementById('pdp');
   pdp.innerHTML = `
     <div style="margin-bottom:10px"><a href="#" id="backLink" style="text-decoration:none;color:#333;font-weight:800">← Volver</a></div>
     <div class="pdp-grid">
@@ -842,7 +886,6 @@ function renderPDPFromCard(card){
     </div>
   `;
 
-  // thumbs
   const thumbs = document.getElementById('pdpThumbs');
   const mainImg = document.getElementById('pdpMain');
   images.forEach((src)=>{
@@ -853,7 +896,6 @@ function renderPDPFromCard(card){
     thumbs.appendChild(t);
   });
 
-  // Colores
   const pdpColors = document.getElementById('pdpColors');
   const colorBtns = [];
   card.querySelectorAll('.var').forEach((v,idx)=>{
@@ -866,7 +908,6 @@ function renderPDPFromCard(card){
     colorBtns.push(b); pdpColors.appendChild(b);
   });
 
-  // Tallas
   const pdpSizes = document.getElementById('pdpSizes');
   const sizeBtns = [];
   const tallas=card.querySelectorAll('.talla');
@@ -888,14 +929,8 @@ function renderPDPFromCard(card){
     });
   }
 
-  function currentColor(){
-    const c = pdpColors.querySelector('.var.selected');
-    return c ? (c.getAttribute('aria-label') || 'Color seleccionado') : 'Color N/D';
-  }
-  function currentSize(){
-    const s = pdpSizes.querySelector('.talla.selected');
-    return s ? s.textContent.trim() : 'Talla N/D';
-  }
+  function currentColor(){ const c = pdpColors.querySelector('.var.selected'); return c ? (c.getAttribute('aria-label') || 'Color seleccionado') : 'Color N/D'; }
+  function currentSize(){ const s = pdpSizes.querySelector('.talla.selected'); return s ? s.textContent.trim() : 'Talla N/D'; }
 
   function openWA(){
     const msg = `Hola! Quiero comprar:\n• ${title}\n• ${price}\n• ${currentColor()}\n• Talla: ${currentSize()}\n\nLink: ${location.href}`;
@@ -904,14 +939,10 @@ function renderPDPFromCard(card){
   }
   document.getElementById('pdpBuy').addEventListener('click', openWA);
 
-  /* Favoritos en PDP (usa slug único) */
   const pdpFavBtn = document.getElementById('pdpFav');
   const currentSlug = card.dataset.slug;
   const isFav = (sl)=> getFavs().includes(sl);
-  function setFavUI(){
-    pdpFavBtn.textContent = isFav(currentSlug) ? "Guardado ✓" : "Añadir a favoritos";
-    card.classList.toggle('fav', isFav(currentSlug));
-  }
+  function setFavUI(){ pdpFavBtn.textContent = isFav(currentSlug) ? "Guardado ✓" : "Añadir a favoritos"; card.classList.toggle('fav', isFav(currentSlug)); }
   setFavUI();
 
   pdpFavBtn.addEventListener('click', ()=>{
@@ -923,7 +954,6 @@ function renderPDPFromCard(card){
 
   document.getElementById('backLink').addEventListener('click',(e)=>{ e.preventDefault(); history.back(); });
 
-  // Sticky
   stickyPrice.textContent = price;
   stickyBuy.onclick = openWA;
 
@@ -931,10 +961,10 @@ function renderPDPFromCard(card){
   grid.style.display='none';
   hero.style.display='none';
   stickyBar.hidden = false;
-  document.body.classList.add('has-sticky');
+  document.body.classList.add('has-sticky','in-pdp');
 }
 
-/* Router con rutas: "", "#/product/:slug", "#/favorites" */
+/* Router */
 function onRoute(){
   const favR = location.hash === '#/favorites';
   const prodM = location.hash.match(/^#\/product\/(.+)$/);
@@ -952,7 +982,6 @@ function onRoute(){
     return;
   }
 
-  // HOME
   pdp.classList.remove('show'); pdp.innerHTML='';
   showHome();
   closeDrawer();
@@ -960,7 +989,5 @@ function onRoute(){
 window.addEventListener('hashchange', onRoute);
 onRoute();
 </script>
-
-
 </body>
 </html>
