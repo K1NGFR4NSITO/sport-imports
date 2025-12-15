@@ -60,7 +60,7 @@
   }
 
   /* ===== NAV DESKTOP ===== */
-  .navwrap{position:sticky; top:calc(var(--topbar-h) + 48px); z-index:50; background:#fff; border-bottom:1px solid var(--line); display:flex; justify-content:center}
+  .navwrap{position:sticky; top:var(--topbar-h); z-index:50; background:#fff; border-bottom:1px solid var(--line); display:flex; justify-content:center}
   nav{display:flex; gap:28px; padding:14px 20px; max-width:1200px; margin:0 auto;}
   nav>.nav-item{position:relative; padding-bottom:10px}
   nav>.nav-item>button{background:none;border:none;cursor:pointer;font-weight:700;font-size:15px;color:var(--ink);padding:8px 10px;border-radius:8px;transition:.15s}
@@ -434,7 +434,7 @@
       <img src="y1.jpeg" data-img alt="Warrior Hoodie">
       <div class="p-info">
         <div class="p-titulo">Warrior Compression Hoodies - 8062</div>
-        <div class="price">Bs 1000</div>
+        <div class="price">Bs 850</div>
         <div class="p-desc" hidden>Hoodie de compresión, corte atlético.</div>
         <div class="variantes">
           <button class="var" style="background:#e70d0d" data-img="y1.jpeg"></button>
@@ -457,7 +457,7 @@
       <img src="warriorcompressionteesblue.jpeg" data-img alt="Warrior Tees 4041">
       <div class="p-info">
         <div class="p-titulo">Warrior Compression Tees - 4041</div>
-        <div class="price">Bs 940</div>
+        <div class="price">Bs 800</div>
         <div class="p-desc" hidden>Tejido elástico con compresión media.</div>
         <div class="variantes">
           <button class="var selected" style="background:#2a2fac" data-img="warriorcompressionteesblue.jpeg"></button>
@@ -481,7 +481,7 @@
       <img src="supermancompressionteesred.jpeg" data-img alt="Superman Compression Tees - 4117">
       <div class="p-info">
         <div class="p-titulo">Superman Compression Tees - 4117</div>
-        <div class="price">Bs 1050</div>
+        <div class="price">Bs 850</div>
         <div class="p-desc" hidden>Licencia oficial, compresión y suavidad.</div>
         <div class="variantes">
           <button class="var agotado" style="background:#e81a1a" data-img="supermancompressionteesred.jpeg"></button>
@@ -507,7 +507,7 @@
       <img src="supermangraphictees1.jpeg" data-img alt="Superman Graphic Tees - 4044">
       <div class="p-info">
         <div class="p-titulo">Superman Graphic Tees - 4044</div>
-        <div class="price">Bs 1020</div>
+        <div class="price">Bs 820</div>
         <div class="p-desc" hidden>Gráficos premium y algodón suave.</div>
         <div class="variantes">
           <button class="var selected" style="background:#000000" data-img="supermangraphictees1.jpeg"></button>
@@ -631,7 +631,7 @@
 <main id="pdp" class="pdp" aria-live="polite"></main>
 <div id="pdpSticky" class="pdp-sticky" hidden>
   <div class="price" id="stickyPrice">Bs 0</div>
-  <button class="btn btn-buy" id="stickyBuy">Comprar por WhatsApp</button>
+  <button class="btn btn-buy" id="stickyBuy">Comprar</button>
 </div>
 
 <footer class="footer-bar">
@@ -804,16 +804,18 @@ function reorderVisible(){
 function applyFilters(){
   const qRaw = (searchInput.value || '').trim().toLowerCase();
   let q = qRaw;
-  const knownBrand = ['youngla','gymshark','breathedivinity','rawgear','controlled'];
 
-  if(knownBrand.includes(qRaw)){ brandFilter = qRaw; searchInput.value = ''; q = ''; }
 
   document.querySelectorAll('.producto').forEach(card=>{
-    const title = card.querySelector('.p-titulo')?.textContent.toLowerCase() || '';
-    const brand = (card.dataset.brand || '').toLowerCase();
-    const okText = !q || title.includes(q);
-    const okBrand = !brandFilter || brand===brandFilter;
-    card.style.display = (okText && okBrand) ? '' : 'none';
+const title = card.querySelector('.p-titulo')?.textContent.toLowerCase() || '';
+const brand = (card.dataset.brand || '').toLowerCase();
+
+const searchable = `${title} ${brand}`;
+const okText = !q || searchable.includes(q);
+const okBrand = !brandFilter || brand === brandFilter;
+
+card.style.display = (okText && okBrand) ? '' : 'none';
+
   });
 
   if(brandFilter){ setTitle(brandFilter.charAt(0).toUpperCase()+brandFilter.slice(1)); showHero(false);
@@ -824,11 +826,12 @@ function applyFilters(){
   reorderVisible();
 }
 
-sToggle?.addEventListener('click', ()=>{
-  const open = !sPanel.classList.contains('show');
-  sPanel.classList.toggle('show', open);
-  if(open) searchInput.focus();
+sToggle?.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  sPanel.classList.add('show');
+  searchInput.focus();
 });
+
 searchInput.addEventListener('input', applyFilters);
 searchClear.addEventListener('click', ()=>{ searchInput.value=''; brandFilter=null; applyFilters(); });
 
@@ -978,7 +981,7 @@ function renderPDPFromCard(card){
         <div class="pdp-row"><div style="font-weight:700;margin-bottom:6px">Color</div><div id="pdpColors" class="variantes"></div></div>
         <div class="pdp-row"><div style="font-weight:700;margin-bottom:6px">Talla</div><div id="pdpSizes" class="tallas"></div></div>
         <div class="pdp-actions">
-          <button class="btn btn-buy" id="pdpBuy">Comprar por WhatsApp</button>
+          <button class="btn btn-buy" id="pdpBuy">Comprar</button>
           <button class="btn btn-outline" id="pdpFav">Añadir a favoritos</button>
         </div>
       </section>
