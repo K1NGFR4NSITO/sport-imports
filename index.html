@@ -117,6 +117,31 @@
   :is(.card, .producto).agotado{pointer-events:none; cursor:not-allowed}
   .producto.fav::after{content:"★"; position:absolute; top:10px; right:12px; font-weight:900; font-size:18px; color:#FFB703; text-shadow:0 1px 0 #0003;}
 
+/* ===== A PEDIDO (mismo sistema que AGOTADO, pero azul) ===== */
+
+/* Mostrar badge A PEDIDO */
+:is(.card, .producto).pedido .pedido-badge{
+  position:absolute;
+  top:12px;
+  left:12px;
+  background:#2F80ED; /* azul */
+  color:#fff;
+  font-weight:900;
+  padding:6px 12px;
+  border-radius:10px;
+  font-size:13px;
+  letter-spacing:.5px;
+  z-index:3;
+  display:inline-block;
+  box-shadow:0 6px 14px rgba(0,0,0,.18);
+
+  /* clave: que NO herede el apagado del card */
+  filter:none;
+  opacity:1;
+}
+
+
+
   /* ===== DRAWER ===== */
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:.25s;z-index:90}
   .overlay.show{opacity:1;pointer-events:auto}
@@ -353,8 +378,8 @@
 
   <div class="producto-lista">
 
-<div class="producto" data-brand="youngla" data-wa="59170661091">
-              <span class="agotado-badge">RESTOCK PRONTO</span>
+<div class="producto agotado" data-brand="youngla" data-wa="59170661091">
+            <span class="agotado-badge">AGOTADO</span>
   
   <img src="bclb.jpeg" data-img alt="Batman Compression Longsleeves">
 
@@ -366,13 +391,13 @@
     <div class="variantes">
       <button class="var agotado" style="background:#000000" data-img="bclb.jpeg"></button>
       <button class="var agotado" style="background:#959595" data-img="bclg.jpeg"></button>
-      <button class="var selected" style="background:#abeaa4" data-img="bclgre.jpeg"></button>
+      <button class="var agotado" style="background:#abeaa4" data-img="bclgre.jpeg"></button>
       <button class="var agotado" style="background:#dbe4b8" data-img="bclw.jpeg"></button>
     </div>
 
     <div class="tallas">
       <button class="talla agotada">S</button>
-      <button class="talla selected">M</button>
+      <button class="talla agotada">M</button>
       <button class="talla agotada">L</button>
       <button class="talla agotada">XL</button>
       <button class="talla agotada">XXL</button>
@@ -426,7 +451,7 @@
       <img src="g1.jpeg" data-img alt="Oversize Tee gris">
       <div class="p-info">
         <div class="p-titulo">Element Baselayer Mock Neck Long Sleeve T-Shirt</div>
-        <div class="price">Bs 920</div>
+        <div class="price">Bs 880</div>
         <div class="p-desc" hidden>Compresión ligera y secado rápido.</div>
         <div class="variantes">
           <button class="var selected" style="background:#ddd" data-img="g1.jpeg" aria-label="Gris"></button>
@@ -443,11 +468,13 @@
 
 
 
-    <div class="producto" data-brand="gymshark" data-wa="59170661091">
+    <div class="producto pedido" data-brand="gymshark" data-wa="59170661091">
+  <span class="pedido-badge">A PEDIDO</span>
+
       <img src="g3.jpeg" data-img alt="Geo Seamless">
       <div class="p-info">
         <div class="p-titulo">Geo Seamless Long Sleeve T-Shirt</div>
-        <div class="price">Bs 910</div>
+        <div class="price">Bs 950</div>
         <div class="p-desc" hidden>Tejido seamless con patrón geométrico.</div>
         <div class="variantes"><button class="var selected" style="background:#000" data-img="g3.jpeg" aria-label="Negro"></button></div>
         <div class="tallas">
@@ -457,11 +484,13 @@
       <div class="gallery" hidden><img src="g3.jpeg" alt=""></div>
     </div>
 
-    <div class="producto" data-brand="gymshark" data-wa="59170661091">
+    <div class="producto pedido" data-brand="gymshark" data-wa="59170661091">
+        <span class="pedido-badge">A PEDIDO</span>
+
       <img src="elementbaselayerlongsleeveblack.jpeg" data-img alt="Element Baselayer Long Sleeve Black">
       <div class="p-info">
         <div class="p-titulo">Element Baselayer Long Sleeve T-Shirt</div>
-        <div class="price">Bs 890</div>
+        <div class="price">Bs 770</div>
         <div class="p-desc" hidden>Base layer respirable para entrenamiento.</div>
         <div class="variantes">
           <button class="var selected" style="background:#000000" data-img="elementbaselayerlongsleeveblack.jpeg" aria-label="Negro"></button>
@@ -477,11 +506,13 @@
       </div>
     </div>
 
-    <div class="producto" data-brand="gymshark" data-wa="59170661091">
+    <div class="producto pedido" data-brand="gymshark" data-wa="59170661091">
+        <span class="pedido-badge">A PEDIDO</span>
+
       <img src="elementbaselayerlongsleevegray.jpeg" data-img alt="Element Baselayer Long Sleeve Gray">
       <div class="p-info">
         <div class="p-titulo">Element Baselayer Long Sleeve T-Shirt</div>
-        <div class="price">Bs 840</div>
+        <div class="price">Bs 720</div>
         <div class="p-desc" hidden>Secado rápido y ajuste atlético.</div>
         <div class="variantes">
           <button class="var selected" style="background:#919191" data-img="elementbaselayerlongsleevegray.jpeg" aria-label="Gris"></button>
@@ -501,10 +532,11 @@
 
     <!-- ===== YOUNGLA ===== -->
     <div class="producto" data-brand="youngla" data-wa="59170661091">
+      
       <img src="y1.jpeg" data-img alt="Warrior Hoodie">
       <div class="p-info">
         <div class="p-titulo">Warrior Compression Hoodies - 8062</div>
-        <div class="price">Bs 900</div>
+        <div class="price">Bs 850</div>
         <div class="p-desc" hidden>Hoodie de compresión, corte atlético.</div>
         <div class="variantes">
           <button class="var agotado" style="background:#e70d0d" data-img="y1.jpeg"></button>
@@ -523,11 +555,13 @@
       </div>
     </div>
 
-    <div class="producto" data-brand="youngla" data-wa="59170661091">
+    <div class="producto pedido" data-brand="youngla" data-wa="59170661091">
+        <span class="pedido-badge">A PEDIDO</span>
+
       <img src="warriorcompressionteesblue.jpeg" data-img alt="Warrior Tees 4041">
       <div class="p-info">
         <div class="p-titulo">Warrior Compression Tees - 4041</div>
-        <div class="price">Bs 850</div>
+        <div class="price">Bs 800</div>
         <div class="p-desc" hidden>Tejido elástico con compresión media.</div>
         <div class="variantes">
           <button class="var selected" style="background:#2a2fac" data-img="warriorcompressionteesblue.jpeg"></button>
@@ -547,20 +581,22 @@
       </div>
     </div>
 
-    <div class="producto" data-brand="youngla" data-wa="59170661091">
+    <div class="producto agotado" data-brand="youngla" data-wa="59170661091">
+                  <span class="agotado-badge">AGOTADO</span>
+
       <img src="supermancompressionteesred.jpeg" data-img alt="Superman Compression Tees - 4117">
       <div class="p-info">
         <div class="p-titulo">Superman Compression Tees - 4117</div>
-        <div class="price">Bs 900</div>
+        <div class="price">Bs 850</div>
         <div class="p-desc" hidden>Licencia oficial, compresión y suavidad.</div>
         <div class="variantes">
           <button class="var agotado" style="background:#e81a1a" data-img="supermancompressionteesred.jpeg"></button>
           <button class="var agotado" style="background:#172bc8" data-img="supermancompressionteesblue.jpeg"></button>
-          <button class="var selected" style="background:#000000" data-img="supermancompressionteesblack.jpeg"></button>
+          <button class="var agotado" style="background:#000000" data-img="supermancompressionteesblack.jpeg"></button>
           <button class="var agotado" style="background:#490e68" data-img="supermancompressionteespurple.jpeg"></button>
         </div>
         <div class="tallas">
-          <button class="talla agotada">S</button><button class="talla selected">M</button>
+          <button class="talla agotada">S</button><button class="talla agotada">M</button>
           <button class="talla agotada">L</button><button class="talla agotada">XL</button>
           <button class="talla agotada">XXL</button>
         </div>
@@ -577,7 +613,7 @@
             <span class="agotado-badge">AGOTADO</span>
       <img src="supermangraphictees1.jpeg" data-img alt="Superman Graphic Tees - 4044">
       <div class="p-info">
-        <div class="p-titulo">Superman Graphic Tees - 4044</div>
+        <div class="p-titulo">Superman Graphic Tees</div>
         <div class="price">Bs 820</div>
         <div class="p-desc" hidden>Gráficos premium y algodón suave.</div>
         <div class="variantes">
@@ -600,11 +636,13 @@
       </div>
     </div>
 
-    <div class="producto" data-brand="gymshark" data-wa="59170661091">
+    <div class="producto pedido" data-brand="gymshark" data-wa="59170661091">
+              <span class="pedido-badge">A PEDIDO</span>
+
       <img src="cresthoodie.jpeg" data-img alt="Crest Hoodie">
       <div class="p-info">
         <div class="p-titulo">Crest Hoodie</div>
-        <div class="price">Bs 940</div>
+        <div class="price">Bs 950</div>
         <div class="p-desc" hidden>Secado rápido y ajuste atlético.</div>
         <div class="variantes">
           <button class="var selected" style="background:#000000" data-img="cresthoodie.jpeg" aria-label="Gris"></button>
@@ -620,11 +658,13 @@
       </div>
     </div>
 
-        <div class="producto" data-brand="gymshark" data-wa="59170661091">
+        <div class="producto pedido" data-brand="gymshark" data-wa="59170661091">
+                  <span class="pedido-badge">A PEDIDO</span>
+
       <img src="global.jpeg" data-img alt="Global Lifting Oversized Joggers">
       <div class="p-info">
         <div class="p-titulo">Global Lifting Oversized Joggers</div>
-        <div class="price">Bs 1000</div>
+        <div class="price">Bs 1050</div>
         <div class="p-desc" hidden>Cintura ajustable con cordon. Bolsillos para guardar tus cosas. Ideal para usar dentro o fuera del gimnasio</div>
         <div class="variantes">
           <button class="var selected" style="background:#000000" data-img="global.jpeg" aria-label="Gris"></button>
@@ -640,11 +680,13 @@
       </div>
     </div>
 
-        <div class="producto" data-brand="gymshark" data-wa="59170661091">
+        <div class="producto pedido" data-brand="gymshark" data-wa="59170661091">
+                  <span class="pedido-badge">A PEDIDO</span>
+
       <img src="powerblack.jpeg" data-img alt="Power T-shirt">
       <div class="p-info">
         <div class="p-titulo">Power T-shirt</div>
-        <div class="price">Bs 890</div>
+        <div class="price">Bs 780</div>
         <div class="p-desc" hidden>Silueta oversize y robusta. El iconico estampado Gymashark estiliza tu espalda. 99% algodon, 5% elastano</div>
         <div class="variantes">
           <button class="var selected" style="background:#000000" data-img="powerblack.jpeg" aria-label="Gris"></button>
@@ -693,12 +735,14 @@
       <div class="gallery" hidden><img src="shadowseamlessback.jpeg" alt=""></div>
     </div>
 
-    <div class="producto" data-brand="youngla" data-wa="59170661091">
+    <div class="producto pedido" data-brand="youngla" data-wa="59170661091">
+                        <span class="pedido-badge">A PEDIDO</span>
+
   <img src="gcr.jpeg" data-img alt="Gothic Compression Tee">
 
   <div class="p-info">
     <div class="p-titulo">Gothic Compression Tee</div>
-    <div class="price">Bs 970</div>
+    <div class="price">Bs 800</div>
     <div class="p-desc" hidden>El estampado gótico está estratégicamente ubicado en los hombros y el pecho para ensanchar tu figura y llamar la atención sin ser llamativo.</div>
 
     <div class="variantes">
@@ -710,8 +754,8 @@
 
     <div class="tallas">
       <button class="talla agotada">S</button>
-      <button class="talla selected">M</button>
-      <button class="talla">L</button>
+      <button class="talla agotada">M</button>
+      <button class="talla selected">L</button>
       <button class="talla">XL</button>
       <button class="talla">XXL</button>
     </div>
