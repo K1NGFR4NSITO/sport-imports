@@ -194,7 +194,62 @@
   }
 
   .bottom-strip{position:fixed; left:0; right:0; bottom:0; height:10px; background:#000; z-index:10}
-  .empty-favs{grid-column:1/-1; padding:40px; text-align:center; color:#666; font-weight:600;}
+.empty-favs{
+  padding:40px;
+  text-align:center;
+  color:#666;
+  font-weight:600;
+  border:1px solid var(--line);
+  border-radius:14px;
+  margin-top:16px;
+}
+
+/* ===== PAGINACIÓN ===== */
+.pager{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:14px;
+  padding:18px 0 10px;
+  user-select:none;
+}
+.pager button{
+  border:none;
+  background:transparent;
+  cursor:pointer;
+  font-weight:800;
+  padding:8px 10px;
+  border-radius:10px;
+  color:#111;
+  opacity:.9;
+}
+.pager button:hover{ background:#00000010; }
+.pager button[disabled]{ opacity:.35; cursor:not-allowed; }
+
+.pager .nums{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.pager .num{
+  min-width:28px;
+  text-align:center;
+  padding:8px 10px;
+  border-radius:10px;
+  font-weight:800;
+  cursor:pointer;
+}
+.pager .num.active{
+  border-bottom:3px solid #111;
+  border-radius:0;
+  padding-bottom:6px;
+}
+.pager .dots{
+  opacity:.55;
+  font-weight:900;
+  padding:0 2px;
+}
+
 </style>
 </head>
 <body>
@@ -355,16 +410,20 @@
 <section class="hero" id="hero" aria-label="Hero carousel">
   <div class="slides" id="slides">
     <div class="slide">
-      <img src="blackfriday.jpg" alt="">
-      <div class="cta"><h2>NUEVO DROP</h2><a href="#">VER MÁS</a></div>
+      <img src="banner naruto.png" alt="">
+      <div class="cta"><h2>NUEVO DROP MUY PRONTO</h2></div>
     </div>
     <div class="slide">
-      <img src="gymsharkblack.jpg" alt="">
-      <div class="cta"><h2>BLACK FRIDAY</h2><a href="#">VER MÁS</a></div>
+      <img src="promo.jpeg" alt="">
+      <div class="cta"><h2>PROMOCION ACTIVA</h2><a href="#/promo" class="cta-route">VER MÁS</a>
+</div>
     </div>
     <div class="slide">
-      <img src="superman.jpg" alt="">
-      <div class="cta"><h2>RESTOCK MUY PRONTO</h2><a href="#">VER MÁS</a></div>
+      <img src="frazetta.png" alt="">
+<div class="cta">
+  <h2>GYMSHARK x FRAZETTA</h2>
+<a href="#/collection/frazetta" class="cta-route">VER MÁS</a>
+</div>
     </div>
   </div>
   <button class="h-arrow h-prev" id="prev">‹</button>
@@ -377,6 +436,70 @@
   <h3 id="gridTitle">Novedades</h3>
 
   <div class="producto-lista">
+
+
+
+
+    <div class="producto" data-brand="gymshark" data-collection="frazetta" data-wa="59170661091">
+  
+  <img src="frazettahoodie.jpeg" data-img alt="Powwer x Frazetta Graphic Hoodie">
+
+  <div class="p-info">
+    <div class="p-titulo">Gymshark - Powwer x Frazetta Graphic Hoodie</div>
+    <div class="price">Bs 1450</div>
+    <div class="p-desc" hidden>El ajuste extragrande perfecto
+Nuestra tela más suave para tus levantamientos más pesados
+Arte inspirado en guerreros de Frank Frazetta
+Lista para levantar, correr y aferrarte a lo que sea 100 % algodón
+850 gramos</div>
+
+    <div class="variantes">
+      <button class="var selected" style="background:#e73e3e" data-img="frazettahoodie.jpeg"></button>
+    </div>
+
+    <div class="tallas">
+      <button class="talla selected">M</button>
+    </div>
+  </div>
+
+  <div class="gallery" hidden>
+    <img src="frazettahoodie.jpeg">
+    <img src="frazettahoodie2.jpeg">
+  </div>
+</div>
+
+<div class="producto" data-brand="gymshark" data-collection="frazetta" data-wa="59170661091">
+  
+  <img src="frazettashirtred.jpeg" data-img alt="Powwer x Frazetta Graphic T-Shirt">
+
+  <div class="p-info">
+    <div class="p-titulo">Gymshark - Powwer x Frazetta Graphic T-Shirt</div>
+    <div class="price">Bs 1100</div>
+    <div class="p-desc" hidden>El ajuste extragrande perfecto
+Nuestra tela más suave para tus levantamientos más pesados
+Arte inspirado en guerreros de Frank Frazetta
+Lista para levantar, correr y aferrarte a lo que sea 100 % algodón
+440 gramos</div>
+
+    <div class="variantes">
+      <button class="var selected" style="background:#e73e3e" data-img="frazettashirtred.jpeg"></button>
+            <button class="var " style="background:#3194e5" data-img="frazettashirtblue.jpeg"></button>
+    </div>
+
+    <div class="tallas">
+      <button class="talla selected">M</button>
+      <button class="talla ">L</button>
+
+    </div>
+  </div>
+
+  <div class="gallery" hidden>
+    <img src="frazettashirtred.jpeg">
+    <img src="frazettashirtred2.jpeg">
+    <img src="frazettashirtblue.jpeg">
+    <img src="frazettashirtblue2.jpeg">
+  </div>
+</div>
 
     <div class="producto agotado" data-brand="youngla" data-wa="59170661091">
               <span class="agotado-badge">AGOTADO</span>
@@ -412,26 +535,25 @@
   </div>
 </div>
 
-<div class="producto agotado" data-brand="youngla" data-wa="59170661091">
-            <span class="agotado-badge">AGOTADO</span>
+<div class="producto " data-brand="youngla" data-wa="59170661091">
   
   <img src="bclb.jpeg" data-img alt="Batman Compression Longsleeves">
 
   <div class="p-info">
     <div class="p-titulo">Youngla - Batman Compression Longsleeves</div>
-    <div class="price">Bs 1030</div>
+    <div class="price">Bs 1100</div>
     <div class="p-desc" hidden>Licencia oficial, compresión y suavidad.</div>
 
     <div class="variantes">
-      <button class="var agotado" style="background:#000000" data-img="bclb.jpeg"></button>
-      <button class="var agotado" style="background:#959595" data-img="bclg.jpeg"></button>
+      <button class="var selected" style="background:#000000" data-img="bclb.jpeg"></button>
+      <button class="var " style="background:#959595" data-img="bclg.jpeg"></button>
       <button class="var agotado" style="background:#abeaa4" data-img="bclgre.jpeg"></button>
       <button class="var agotado" style="background:#dbe4b8" data-img="bclw.jpeg"></button>
     </div>
 
     <div class="tallas">
       <button class="talla agotada">S</button>
-      <button class="talla agotada">M</button>
+      <button class="talla selected">M</button>
       <button class="talla agotada">L</button>
       <button class="talla agotada">XL</button>
       <button class="talla agotada">XXL</button>
@@ -445,7 +567,8 @@
     <img src="bclw.jpeg">
   </div>
 </div>
-    
+  
+
 <div class="producto" data-brand="gymshark" data-wa="59170661091">
   
   <img src="Primejoggers1.jpeg" data-img alt="Prime Joggers">
@@ -472,6 +595,30 @@
   <div class="gallery" hidden>
     <img src="Primejoggers1.jpeg">
     <img src="Primejoggers2.jpeg">
+  </div>
+</div>
+
+ <div class="producto" data-brand="youngla" data-wa="59170661091">
+  
+  <img src="immortaljogger.jpeg" data-img alt="Immortal Killer Joggers">
+
+  <div class="p-info">
+    <div class="p-titulo">Youngla - Immortal Killer Joggers</div>
+    <div class="price">Bs 1200</div>
+    <div class="p-desc" hidden>Los joggers Immortal Killer son toda una declaración de estilo. Con su diseño holgado y su exclusivo estampado abullonado en ambas piernas, estos joggers son una prenda visualmente impactante. Inspirados en nuestros joggers Immortal más vendidos, estos pantalones ofrecen el mismo estilo llamativo. 100% Algodon </div>
+
+    <div class="variantes">
+      <button class="var selected" style="background:#000000" data-img="immortaljogger.jpeg"></button>
+    </div>
+
+    <div class="tallas">
+      <button class="talla selected">M</button>
+    </div>
+  </div>
+
+  <div class="gallery" hidden>
+    <img src="immortaljogger.jpeg">
+    <img src="immortaljogger2.jpeg">
   </div>
 </div>
 
@@ -638,7 +785,7 @@
 
   <div class="p-info">
     <div class="p-titulo">Gymshark - Everyday Mini Holdall</div>
-    <div class="price">Bs 620</div>
+    <div class="price">Bs 600</div>
     <div class="p-desc" hidden>La Everyday Mini Bagall es tu mejor opción para guardar tus pequeños artículos esenciales del gimnasio.
 
 • Cierre a presión para unir las asas.
@@ -686,24 +833,24 @@
 
 
 
-    <div class="producto pedido" data-brand="gymshark" data-wa="59170661091">
-  <span class="pedido-badge">A PEDIDO</span>
+    <div class="producto agotado" data-brand="gymshark" data-wa="59170661091">
+              <span class="agotado-badge">AGOTADO</span>
 
       <img src="g3.jpeg" data-img alt="Geo Seamless">
       <div class="p-info">
         <div class="p-titulo">Gymshark - Geo Seamless Long Sleeve T-Shirt</div>
         <div class="price">Bs 950</div>
         <div class="p-desc" hidden>Tejido seamless con patrón geométrico.</div>
-        <div class="variantes"><button class="var selected" style="background:#000" data-img="g3.jpeg" aria-label="Negro"></button></div>
+        <div class="variantes"><button class="var agotado" style="background:#000" data-img="g3.jpeg" aria-label="Negro"></button></div>
         <div class="tallas">
-          <button class="talla agotada">S</button><button class="talla agotada">M</button><button class="talla agotada">L</button><button class="talla selected">XL</button><button class="talla">XXL</button>
+          <button class="talla agotada">S</button><button class="talla agotada">M</button><button class="talla agotada">L</button><button class="talla agotada">XL</button><button class="talla agotada">XXL</button>
         </div>
       </div>
       <div class="gallery" hidden><img src="g3.jpeg" alt=""></div>
     </div>
 
-    <div class="producto pedido" data-brand="gymshark" data-wa="59170661091">
-        <span class="pedido-badge">A PEDIDO</span>
+    <div class="producto agotado" data-brand="gymshark" data-wa="59170661091">
+              <span class="agotado-badge">AGOTADO</span>
 
       <img src="elementbaselayerlongsleeveblack.jpeg" data-img alt="Element Baselayer Long Sleeve Black">
       <div class="p-info">
@@ -711,11 +858,11 @@
         <div class="price">Bs 770</div>
         <div class="p-desc" hidden>Base layer respirable para entrenamiento.</div>
         <div class="variantes">
-          <button class="var selected" style="background:#000000" data-img="elementbaselayerlongsleeveblack.jpeg" aria-label="Negro"></button>
-          <button class="var" style="background:#fdfdfd" data-img="elementbaselayerlongsleevewhite.jpeg" aria-label="Blanco"></button>
+          <button class="var agotado" style="background:#000000" data-img="elementbaselayerlongsleeveblack.jpeg" aria-label="Negro"></button>
+          <button class="var agotado" style="background:#fdfdfd" data-img="elementbaselayerlongsleevewhite.jpeg" aria-label="Blanco"></button>
         </div>
         <div class="tallas">
-          <button class="talla agotada">S</button><button class="talla agotada">M</button><button class="talla selected">L</button><button class="talla">XL</button><button class="talla">XXL</button>
+          <button class="talla agotada">S</button><button class="talla agotada">M</button><button class="talla agotada">L</button><button class="talla agotada">XL</button><button class="talla agotada">XXL</button>
         </div>
       </div>
       <div class="gallery" hidden>
@@ -724,8 +871,8 @@
       </div>
     </div>
 
-    <div class="producto pedido" data-brand="gymshark" data-wa="59170661091">
-        <span class="pedido-badge">A PEDIDO</span>
+    <div class="producto agotado" data-brand="gymshark" data-wa="59170661091">
+              <span class="agotado-badge">AGOTADO</span>
 
       <img src="elementbaselayerlongsleevegray.jpeg" data-img alt="Element Baselayer Long Sleeve Gray">
       <div class="p-info">
@@ -733,12 +880,12 @@
         <div class="price">Bs 720</div>
         <div class="p-desc" hidden>Secado rápido y ajuste atlético.</div>
         <div class="variantes">
-          <button class="var selected" style="background:#919191" data-img="elementbaselayerlongsleevegray.jpeg" aria-label="Gris"></button>
+          <button class="var agotado" style="background:#919191" data-img="elementbaselayerlongsleevegray.jpeg" aria-label="Gris"></button>
           <button class="var agotado" style="background:#0c6442" data-img="elementbaselayerlongsleevegreen.jpeg" aria-label="Verde"></button>
-          <button class="var" style="background:#6d5f5f" data-img="elementbaselayerlongsleevebrown.jpeg" aria-label="Marrón"></button>
+          <button class="var agotado" style="background:#6d5f5f" data-img="elementbaselayerlongsleevebrown.jpeg" aria-label="Marrón"></button>
         </div>
         <div class="tallas">
-          <button class="talla agotada">S</button><button class="talla agotada">M</button><button class="talla agotada">L</button><button class="talla selected">XL</button><button class="talla agotada">XXL</button>
+          <button class="talla agotada">S</button><button class="talla agotada">M</button><button class="talla agotada">L</button><button class="talla agotada">XL</button><button class="talla agotada">XXL</button>
         </div>
       </div>
       <div class="gallery" hidden>
@@ -773,8 +920,8 @@
       </div>
     </div>
 
-    <div class="producto pedido" data-brand="youngla" data-wa="59170661091">
-        <span class="pedido-badge">A PEDIDO</span>
+    <div class="producto agotado" data-brand="youngla" data-wa="59170661091">
+              <span class="agotado-badge">AGOTADO</span>
 
       <img src="warriorcompressionteesblue.jpeg" data-img alt="Warrior Tees 4041">
       <div class="p-info">
@@ -782,13 +929,13 @@
         <div class="price">Bs 800</div>
         <div class="p-desc" hidden>Tejido elástico con compresión media.</div>
         <div class="variantes">
-          <button class="var selected" style="background:#2a2fac" data-img="warriorcompressionteesblue.jpeg"></button>
-          <button class="var" style="background:#000000" data-img="warriorcompressionteesblack.jpeg"></button>
-          <button class="var" style="background:#c0c0c0" data-img="warriorcompressionteesgray.jpeg"></button>
-          <button class="var" style="background:#490e68" data-img="warriorcompressionteespurple.jpeg"></button>
+          <button class="var agotado" style="background:#2a2fac" data-img="warriorcompressionteesblue.jpeg"></button>
+          <button class="var agotado" style="background:#000000" data-img="warriorcompressionteesblack.jpeg"></button>
+          <button class="var agotado" style="background:#c0c0c0" data-img="warriorcompressionteesgray.jpeg"></button>
+          <button class="var agotado" style="background:#490e68" data-img="warriorcompressionteespurple.jpeg"></button>
         </div>
         <div class="tallas">
-          <button class="talla agotada">S</button><button class="talla selected">M</button><button class="talla">L</button><button class="talla">XL</button><button class="talla">XXL</button>
+          <button class="talla agotada">S</button><button class="talla agotada">M</button><button class="talla agotada">L</button><button class="talla agotada">XL</button><button class="talla agotada">XXL</button>
         </div>
       </div>
       <div class="gallery" hidden>
@@ -799,8 +946,7 @@
       </div>
     </div>
 
-    <div class="producto agotado" data-brand="youngla" data-wa="59170661091">
-                  <span class="agotado-badge">AGOTADO</span>
+    <div class="producto" data-brand="youngla" data-wa="59170661091">
 
       <img src="supermancompressionteesred.jpeg" data-img alt="Superman Compression Tees - 4117">
       <div class="p-info">
@@ -808,13 +954,13 @@
         <div class="price">Bs 850</div>
         <div class="p-desc" hidden>Licencia oficial, compresión y suavidad.</div>
         <div class="variantes">
-          <button class="var agotado" style="background:#e81a1a" data-img="supermancompressionteesred.jpeg"></button>
+          <button class="var selected" style="background:#e81a1a" data-img="supermancompressionteesred.jpeg"></button>
           <button class="var agotado" style="background:#172bc8" data-img="supermancompressionteesblue.jpeg"></button>
-          <button class="var agotado" style="background:#000000" data-img="supermancompressionteesblack.jpeg"></button>
+          <button class="var " style="background:#000000" data-img="supermancompressionteesblack.jpeg"></button>
           <button class="var agotado" style="background:#490e68" data-img="supermancompressionteespurple.jpeg"></button>
         </div>
         <div class="tallas">
-          <button class="talla agotada">S</button><button class="talla agotada">M</button>
+          <button class="talla agotada">S</button><button class="talla selected">M</button>
           <button class="talla agotada">L</button><button class="talla agotada">XL</button>
           <button class="talla agotada">XXL</button>
         </div>
@@ -854,8 +1000,8 @@
       </div>
     </div>
 
-    <div class="producto pedido" data-brand="gymshark" data-wa="59170661091">
-              <span class="pedido-badge">A PEDIDO</span>
+    <div class="producto agotado" data-brand="gymshark" data-wa="59170661091">
+              <span class="agotado-badge">AGOTADO</span>
 
       <img src="cresthoodie.jpeg" data-img alt="Crest Hoodie">
       <div class="p-info">
@@ -863,10 +1009,10 @@
         <div class="price">Bs 950</div>
         <div class="p-desc" hidden>Secado rápido y ajuste atlético.</div>
         <div class="variantes">
-          <button class="var selected" style="background:#000000" data-img="cresthoodie.jpeg" aria-label="Gris"></button>
+          <button class="var agotado" style="background:#000000" data-img="cresthoodie.jpeg" aria-label="Gris"></button>
         </div>
         <div class="tallas">
-          <button class="talla selected">S</button><button class="talla">M</button><button class="talla">L</button><button class="talla agotada">XL</button><button class="talla">XXL</button>
+          <button class="talla agotada">S</button><button class="talla agotada">M</button><button class="talla agotada">L</button><button class="talla agotada">XL</button><button class="talla agotada">XXL</button>
         </div>
       </div>
       <div class="gallery" hidden>
@@ -876,7 +1022,7 @@
       </div>
     </div>
 
-        <div class="producto pedido" data-brand="gymshark" data-wa="59170661091">
+        <div class="producto " data-brand="gymshark" data-wa="59170661091">
 
       <img src="global.jpeg" data-img alt="Global Lifting Oversized Joggers">
       <div class="p-info">
@@ -887,7 +1033,7 @@
           <button class="var selected" style="background:#000000" data-img="global.jpeg" aria-label="Gris"></button>
         </div>
         <div class="tallas">
-          <button class="talla selected">S</button><button class="talla">M</button><button class="talla">L</button><button class="talla">XL</button><button class="talla">XXL</button>
+          <button class="talla agotada">S</button><button class="talla selected">M</button><button class="talla agotada">L</button><button class="talla agotada">XL</button><button class="talla agotada">XXL</button>
         </div>
       </div>
       <div class="gallery" hidden>
@@ -897,8 +1043,8 @@
       </div>
     </div>
 
-        <div class="producto pedido" data-brand="gymshark" data-wa="59170661091">
-                  <span class="pedido-badge">A PEDIDO</span>
+        <div class="producto agotado" data-brand="gymshark" data-wa="59170661091">
+              <span class="agotado-badge">AGOTADO</span>
 
       <img src="powerblack.jpeg" data-img alt="Power T-shirt">
       <div class="p-info">
@@ -906,16 +1052,16 @@
         <div class="price">Bs 780</div>
         <div class="p-desc" hidden>Silueta oversize y robusta. El iconico estampado Gymashark estiliza tu espalda. 99% algodon, 5% elastano</div>
         <div class="variantes">
-          <button class="var selected" style="background:#000000" data-img="powerblack.jpeg" aria-label="Gris"></button>
-          <button class="var" style="background:#f30505" data-img="powerred.jpeg"></button>
-          <button class="var" style="background:#16bcbc" data-img="powerceleste.jpeg"></button>
-          <button class="var" style="background:#bbbbbb" data-img="powergray.jpeg"></button>
-          <button class="var" style="background:#2bbe72" data-img="powergreen.jpeg"></button>
-                    <button class="var" style="background:#ffffff" data-img="powerwhite.jpeg"></button>
-                              <button class="var" style="background:#414141" data-img="powergraydark.jpeg"></button>
+          <button class="var agotado" style="background:#000000" data-img="powerblack.jpeg" aria-label="Gris"></button>
+          <button class="var agotado" style="background:#f30505" data-img="powerred.jpeg"></button>
+          <button class="var agotado" style="background:#16bcbc" data-img="powerceleste.jpeg"></button>
+          <button class="var agotado" style="background:#bbbbbb" data-img="powergray.jpeg"></button>
+          <button class="var agotado" style="background:#2bbe72" data-img="powergreen.jpeg"></button>
+                    <button class="var agotado" style="background:#ffffff" data-img="powerwhite.jpeg"></button>
+                              <button class="var agotado" style="background:#414141" data-img="powergraydark.jpeg"></button>
         </div>
         <div class="tallas">
-          <button class="talla selected">S</button><button class="talla">M</button><button class="talla">L</button><button class="talla agotada">XL</button><button class="talla">XXL</button>
+          <button class="talla agotada">S</button><button class="talla agotada">M</button><button class="talla agotada">L</button><button class="talla agotada">XL</button><button class="talla agotada">XXL</button>
         </div>
       </div>
       <div class="gallery" hidden>
@@ -952,8 +1098,8 @@
       <div class="gallery" hidden><img src="shadowseamlessback.jpeg" alt=""></div>
     </div>
 
-    <div class="producto pedido" data-brand="youngla" data-wa="59170661091">
-                        <span class="pedido-badge">A PEDIDO</span>
+    <div class="producto agotado" data-brand="youngla" data-wa="59170661091">
+              <span class="agotado-badge">AGOTADO</span>
 
   <img src="gcr.jpeg" data-img alt="Gothic Compression Tee">
 
@@ -963,18 +1109,18 @@
     <div class="p-desc" hidden>El estampado gótico está estratégicamente ubicado en los hombros y el pecho para ensanchar tu figura y llamar la atención sin ser llamativo.</div>
 
     <div class="variantes">
-      <button class="var selected" style="background:#970606" data-img="gcr.jpeg"></button>
-      <button class="var" style="background:#138999" data-img="grc.jpeg"></button>
-      <button class="var" style="background:#adadad" data-img="gcg.jpeg"></button>
-      <button class="var" style="background:#000" data-img="gcb.jpeg"></button>
+      <button class="var agotado" style="background:#970606" data-img="gcr.jpeg"></button>
+      <button class="var agotado" style="background:#138999" data-img="grc.jpeg"></button>
+      <button class="var agotado" style="background:#adadad" data-img="gcg.jpeg"></button>
+      <button class="var agotado" style="background:#000" data-img="gcb.jpeg"></button>
     </div>
 
     <div class="tallas">
       <button class="talla agotada">S</button>
       <button class="talla agotada">M</button>
-      <button class="talla selected">L</button>
-      <button class="talla">XL</button>
-      <button class="talla">XXL</button>
+      <button class="talla agotada">L</button>
+      <button class="talla agotada">XL</button>
+      <button class="talla agotada">XXL</button>
     </div>
   </div>
 
@@ -987,13 +1133,19 @@
   </div>
 </div>
 
+  </div>
+  <!-- PAGINACIÓN -->
+<div id="pager" class="pager" hidden>
+  <button id="pgPrev" aria-label="Anterior">‹</button>
+  <div id="pgNums" class="nums"></div>
+  <button id="pgNext" aria-label="Siguiente">›</button>
+</div>
 
 
 
     <div id="emptyFavs" class="empty-favs" hidden>
       Aún no tienes favoritos. Entra a un producto y pulsa “Añadir a favoritos”.
     </div>
-  </div>
 </section>
 
 <!-- PDP -->
@@ -1158,6 +1310,104 @@ const searchInput = document.getElementById('searchInput');
 const searchClear = document.getElementById('searchClear');
 const list = document.querySelector('.producto-lista');
 
+/* ====== PAGINACIÓN ====== */
+const ITEMS_PER_PAGE = 24; // 6 filas x 4 items
+
+const pager = document.getElementById('pager');
+const pgPrev = document.getElementById('pgPrev');
+const pgNext = document.getElementById('pgNext');
+const pgNums = document.getElementById('pgNums');
+
+let currentPage = 1;
+
+// Tarjetas que deberían considerarse "visibles" según el estado actual (home/filtro/busqueda/favs)
+function getActiveCards(){
+  // En tu código ya usas style.display = 'none' para filtrar
+  const cards = [...list.querySelectorAll('.producto')];
+  return cards.filter(c => c.style.display !== 'none');
+}
+
+function setPage(p){
+  currentPage = p;
+  renderPage();
+}
+
+function renderPager(totalPages){
+  if(!pager) return;
+
+  if(totalPages <= 1){
+    pager.hidden = false;
+    return;
+  }
+  pager.hidden = false;
+
+  pgPrev.disabled = currentPage <= 1;
+  pgNext.disabled = currentPage >= totalPages;
+
+  // Render tipo: 1 2 3 ... 8 >
+  pgNums.innerHTML = '';
+
+  const addNum = (n) => {
+    const b = document.createElement('div');
+    b.className = 'num' + (n === currentPage ? ' active' : '');
+    b.textContent = n;
+    b.addEventListener('click', ()=> setPage(n));
+    pgNums.appendChild(b);
+  };
+
+  const addDots = () => {
+    const d = document.createElement('div');
+    d.className = 'dots';
+    d.textContent = '...';
+    pgNums.appendChild(d);
+  };
+
+  // Mostrar máximo ~7 elementos: 1,2,(...), alrededor de current, ..., last
+  const total = totalPages;
+  const p = currentPage;
+
+  if(total <= 7){
+    for(let i=1;i<=total;i++) addNum(i);
+    return;
+  }
+
+  addNum(1);
+
+  // Ventana alrededor de la página actual
+  const left = Math.max(2, p - 1);
+  const right = Math.min(total - 1, p + 1);
+
+  if(left > 2) addDots();
+
+  for(let i=left;i<=right;i++) addNum(i);
+
+  if(right < total - 1) addDots();
+
+  addNum(total);
+}
+
+function renderPage(){
+  const active = getActiveCards();
+  const totalPages = Math.max(1, Math.ceil(active.length / ITEMS_PER_PAGE));
+
+  // Clamp por si cambió filtro/búsqueda y la página actual ya no existe
+  if(currentPage > totalPages) currentPage = totalPages;
+  if(currentPage < 1) currentPage = 1;
+
+  // Primero oculta todos los activos, luego muestra solo el slice de la página
+  active.forEach(c => c.setAttribute('hidden',''));
+
+  const start = (currentPage - 1) * ITEMS_PER_PAGE;
+  const end = start + ITEMS_PER_PAGE;
+  active.slice(start, end).forEach(c => c.removeAttribute('hidden'));
+
+  renderPager(totalPages);
+}
+
+pgPrev?.addEventListener('click', ()=> setPage(currentPage - 1));
+pgNext?.addEventListener('click', ()=> setPage(currentPage + 1));
+
+
 let brandFilter=null;
 function setTitle(t){ gridTitle.textContent=t; }
 function showHero(ok){ hero.style.display = ok ? '' : 'none'; }
@@ -1173,6 +1423,7 @@ function reorderVisible(){
 function applyFilters(){
   const qRaw = (searchInput.value || '').trim().toLowerCase();
   let q = qRaw;
+currentPage = 1;
 
 
   document.querySelectorAll('.producto').forEach(card=>{
@@ -1193,6 +1444,9 @@ card.style.display = (okText && okBrand) ? '' : 'none';
 
   document.getElementById('emptyFavs')?.setAttribute('hidden','');
   reorderVisible();
+
+  renderPage();
+
 }
 
 sToggle?.addEventListener('click', (e)=>{
@@ -1285,8 +1539,12 @@ function showHome(){
   gridTitle.textContent = 'Novedades';
   document.querySelectorAll('.producto').forEach(c=> c.style.display = '');
   document.getElementById('emptyFavs')?.setAttribute('hidden','');
+  currentPage = 1;
   applyFilters();
   window.scrollTo(0,0);
+  currentPage = 1;
+    // esto ya llama renderPage() al final
+
 }
 brandHome.addEventListener('click', (e)=>{
   e.preventDefault();
@@ -1312,6 +1570,134 @@ function showFavorites(){
   });
   const empty = document.getElementById('emptyFavs');
   if (empty) empty.hidden = any;
+  currentPage = 1;
+renderPage();
+
+}
+function showStaticPage(title, html){
+  // Oculta cosas del home
+  stickyBar.hidden = true;
+  document.body.classList.remove('has-sticky','in-pdp');
+
+  hero.style.display = 'none';
+  grid.style.display = 'none';
+  pager.hidden = true;
+
+  // Render en el contenedor pdp como "página"
+  pdp.innerHTML = `
+    <div style="margin-bottom:10px">
+      <a href="#" id="backLink" style="text-decoration:none;color:#333;font-weight:800">← Volver</a>
+    </div>
+
+    <div style="background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;">
+      <h1 style="font-size:26px;font-weight:900;margin-bottom:10px;">${title}</h1>
+      <div style="color:#333;line-height:1.6;">${html}</div>
+    </div>
+  `;
+  pdp.classList.add('show');
+
+  document.getElementById('backLink').addEventListener('click', (e)=>{
+    e.preventDefault();
+    history.back();
+  });
+
+  window.scrollTo(0,0);
+}
+
+function showPromoPage(){
+  showStaticPage(
+    'PROMOCIÓN ACTIVA',
+    `
+    <div style="font-weight:900;font-size:20px;margin-bottom:12px;">Promo 1800 Bs</div>
+
+    <div style="
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:18px;
+      margin:18px 0 22px;
+    ">
+      <div style="
+        background:#fff;
+        border:1px solid #eaeaea;
+        border-radius:14px;
+        box-shadow:0 8px 22px rgba(0,0,0,.08);
+        overflow:hidden;
+        text-align:center;
+      ">
+        <img src="supermancompressionteesred.jpeg" style="width:100%;aspect-ratio:4/5;object-fit:cover;">
+        <div style="padding:10px 12px;font-weight:800;">Superman Compression Tee</div>
+        <div style="font-size:13px;color:#666;">Talla M — Rojo o Negro</div>
+      </div>
+
+      <div style="
+        background:#fff;
+        border:1px solid #eaeaea;
+        border-radius:14px;
+        box-shadow:0 8px 22px rgba(0,0,0,.08);
+        overflow:hidden;
+        text-align:center;
+      ">
+        <img src="bclb.jpeg" style="width:100%;aspect-ratio:4/5;object-fit:cover;">
+        <div style="padding:10px 12px;font-weight:800;">Batman Compression Longsleeve</div>
+        <div style="font-size:13px;color:#666;">Talla M — Negro o Gris</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:8px;font-weight:700;">Incluye:</div>
+    <ul style="margin:0 0 16px 18px;">
+      <li>Superman Compression Tee (Talla M)</li>
+      <li>Batman Compression Longsleeve (Talla M)</li>
+    </ul>
+
+    <div style="
+      background:#FFF3E0;
+      border:1px solid #ffd9a8;
+      border-radius:12px;
+      padding:12px;
+      margin:14px 0 18px;
+      font-size:14px;
+    ">
+      <b>Nota:</b> Stock sujeto a disponibilidad. Reserva por WhatsApp.
+    </div>
+
+    <button class="btn btn-buy" id="promoWA" style="padding:14px 22px;font-size:15px;">
+      Reservar por WhatsApp
+    </button>
+    `
+  );
+
+  const btn = document.getElementById('promoWA');
+  btn?.addEventListener('click', ()=>{
+    const msg = `Hola! Quiero reservar la PROMO 1800 Bs (Superman M + Batman compresiva M).`;
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+  });
+}
+
+
+function showCollectionPage(key){
+  // Vista lista (grid) filtrada por colección
+  pdp.classList.remove('show');
+  pdp.innerHTML = '';
+  stickyBar.hidden = true;
+  document.body.classList.remove('has-sticky','in-pdp');
+
+  hero.style.display = 'none';
+  grid.style.display = 'block';
+  gridTitle.textContent = `Colección: ${key.toUpperCase()}`;
+
+  // Filtra por data-collection
+  document.querySelectorAll('.producto').forEach(card=>{
+    const c = (card.dataset.collection || '').toLowerCase();
+    card.style.display = (c === key.toLowerCase()) ? '' : 'none';
+  });
+
+  // Re-ordena y pagina
+  document.getElementById('emptyFavs')?.setAttribute('hidden','');
+  currentPage = 1;
+  reorderVisible();
+  renderPage();
+
+  window.scrollTo(0,0);
 }
 
 /* Clicks a favoritos */
@@ -1433,6 +1819,8 @@ function renderPDPFromCard(card){
   hero.style.display='none';
   stickyBar.hidden = false;
   document.body.classList.add('has-sticky','in-pdp');
+  pager.hidden = true;
+
 }
 
 /* Router */
@@ -1440,12 +1828,28 @@ function onRoute(){
   const favR = location.hash === '#/favorites';
   const prodM = location.hash.match(/^#\/product\/(.+)$/);
 
+  // NUEVO: promo
+  if(location.hash === '#/promo'){
+    closeDrawer();
+    showPromoPage();
+    return;
+  }
+
+  // NUEVO: colecciones
+  const colM = location.hash.match(/^#\/collection\/(.+)$/);
+  if(colM){
+    closeDrawer();
+    showCollectionPage(colM[1]);
+    return;
+  }
+
   if(favR){
     pdp.classList.remove('show'); pdp.innerHTML='';
     showFavorites(); window.scrollTo(0,0);
     closeDrawer();
     return;
   }
+
   if(prodM){
     const slug = prodM[1];
     const card = productIndex.get(slug);
@@ -1457,8 +1861,10 @@ function onRoute(){
   showHome();
   closeDrawer();
 }
+
 window.addEventListener('hashchange', onRoute);
 onRoute();
 </script>
+
 </body>
 </html>
