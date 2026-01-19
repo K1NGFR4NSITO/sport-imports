@@ -6,7 +6,7 @@
 <title>Sport Imports</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
 <style>
-  :root{ --bg:#ffffff; --ink:#111111; --muted:#777; --line:#eaeaea; --accent:#FF9F1C; --topbar-h:72px; --danger:#d60000; --pill:#f1f1f1; }
+  :root{ --bg:#ffffff; --ink:#111111; --muted:#777; --line:#eaeaea; --accent:#b8b8b8; --topbar-h:72px; --danger:#d60000; --pill:#f1f1f1; }
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink)}
   [hidden]{ display:none !important; }
@@ -250,9 +250,130 @@
   padding:0 2px;
 }
 
+
+/* ===== INTRO OVERLAY (SEGURO, NO TOCA NADA MÁS) ===== */
+.intro{
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: #000;
+  display: grid;
+  place-items: center;
+}
+
+.intro-video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none; /* clave: el video NO captura clicks */
+}
+
+.intro-layer{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: auto; /* clave: botones sí reciben clicks */
+}
+
+.intro::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: radial-gradient(circle at center, rgba(0,0,0,.15), rgba(0,0,0,.65));
+  pointer-events:none; /* no bloquea clicks */
+}
+
+.intro-badge{
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  color:#fff;
+  font-size: 12px;
+  letter-spacing: 3px;
+  font-weight: 800;
+  padding: 7px 14px;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 999px;
+  background: rgba(0,0,0,.25);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+.intro-btn{
+  position:absolute;
+  left: 50%;
+  bottom: 56px;
+  transform: translateX(-50%);
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  background: rgba(255,255,255,.95);
+  color:#111;
+  border: 1px solid rgba(255,255,255,.35);
+  padding: 14px 26px;
+  border-radius: 999px;
+
+  font-weight: 900;
+  letter-spacing: .8px;
+
+  cursor: pointer;
+  box-shadow: 0 14px 40px rgba(0,0,0,.40);
+  backdrop-filter: blur(8px);
+  transition: .25s ease;
+}
+
+.intro-btn:hover{
+  transform: translateX(-50%) scale(1.02);
+}
+
+.intro-skip{
+  position:absolute;
+  top: 16px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  display:grid;
+  place-items:center;
+  background: rgba(0,0,0,.35);
+  color:#fff;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+/* salida suave */
+.intro.hide{
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease;
+}
+
+
 </style>
 </head>
 <body>
+<!-- INTRO OVERLAY (NO TOCA TU APP) -->
+<div id="introOverlay" class="intro" aria-hidden="true" hidden>
+  <video id="introVideo" class="intro-video" muted playsinline preload="auto">
+    <source src="intro.mp4" type="video/mp4">
+  </video>
+
+  <div class="intro-layer">
+    <div class="intro-badge">SPORT IMPORTS</div>
+
+    <button id="introEnter" class="intro-btn" type="button">
+      <span>ENTRAR A LA TIENDA</span>
+      <span aria-hidden="true">→</span>
+    </button>
+
+    <button id="introSkip" class="intro-skip" type="button" aria-label="Saltar intro">✕</button>
+  </div>
+</div>
 
 <!-- TOPBAR -->
 <header class="topbar">
@@ -501,14 +622,13 @@ Lista para levantar, correr y aferrarte a lo que sea 100 % algodón
   </div>
 </div>
 
-    <div class="producto" data-brand="youngla" data-wa="59170661091">
-              
+    <div class="producto " data-brand="youngla" data-wa="59170661091">
   
   <img src="bctb.jpeg" data-img alt="Batman Compression Tee">
 
   <div class="p-info">
     <div class="p-titulo">Youngla - Batman Compression Tee</div>
-    <div class="price">Bs 1050</div>
+    <div class="price">Bs 980</div>
     <div class="p-desc" hidden>Licencia oficial, compresión y suavidad.</div>
 
     <div class="variantes">
@@ -598,8 +718,9 @@ Lista para levantar, correr y aferrarte a lo que sea 100 % algodón
   </div>
 </div>
 
- <div class="producto" data-brand="youngla" data-wa="59170661091">
-  
+ <div class="producto agotado" data-brand="youngla" data-wa="59170661091">
+                <span class="agotado-badge">AGOTADO</span>
+
   <img src="immortaljogger.jpeg" data-img alt="Immortal Killer Joggers">
 
   <div class="p-info">
@@ -608,10 +729,10 @@ Lista para levantar, correr y aferrarte a lo que sea 100 % algodón
     <div class="p-desc" hidden>Los joggers Immortal Killer son toda una declaración de estilo. Con su diseño holgado y su exclusivo estampado abullonado en ambas piernas, estos joggers son una prenda visualmente impactante. Inspirados en nuestros joggers Immortal más vendidos, estos pantalones ofrecen el mismo estilo llamativo. 100% Algodon </div>
 
     <div class="variantes">
-      <button class="var selected" style="background:#000000" data-img="immortaljogger.jpeg"></button>
+      <button class="var agotado" style="background:#000000" data-img="immortaljogger.jpeg"></button>
     </div>
 
-    <div class="tallas">
+    <div class="talla agotada">
       <button class="talla selected">M</button>
     </div>
   </div>
@@ -749,7 +870,8 @@ Lista para levantar, correr y aferrarte a lo que sea 100 % algodón
 </div>
 
 <div class="producto agotado" data-brand="gymshark" data-wa="59170661091">
-                  <span class="agotado-badge">AGOTADO</span>
+                <span class="agotado-badge">AGOTADO</span>
+
   <img src="Apex1.jpeg" data-img alt="Apex Seamless 1/4 Zip">
 
   <div class="p-info">
@@ -953,7 +1075,7 @@ Lista para levantar, correr y aferrarte a lo que sea 100 % algodón
       <img src="supermancompressionteesred.jpeg" data-img alt="Superman Compression Tees - 4117">
       <div class="p-info">
         <div class="p-titulo">Youngla - Superman Compression Tees</div>
-        <div class="price">Bs 890</div>
+        <div class="price">Bs 850</div>
         <div class="p-desc" hidden>Licencia oficial, compresión y suavidad.</div>
         <div class="variantes">
           <button class="var selected" style="background:#e81a1a" data-img="supermancompressionteesred.jpeg"></button>
@@ -1091,7 +1213,7 @@ Lista para levantar, correr y aferrarte a lo que sea 100 % algodón
 • Sensación premium para un entrenamiento superior
 • Capucha cruzada ligera
 100% NYLON</div>
-        <div class="variantes"><button class="var selected" style="background:#000" data-img="shadowseamless.jpeg" aria-label="Negro"></button></div>
+        <div class="variantes"><button class="var agotado" style="background:#000" data-img="shadowseamless.jpeg" aria-label="Negro"></button></div>
         <div class="tallas">
           <button class="talla agotada">S</button><button class="talla agotada">M</button><button class="talla agotada">L</button><button class="talla agotada">XL</button><button class="talla agotada">XXL</button>
         </div>
@@ -1866,6 +1988,49 @@ function onRoute(){
 
 window.addEventListener('hashchange', onRoute);
 onRoute();
+
+
+(function(){
+  const overlay = document.getElementById('introOverlay');
+  const video   = document.getElementById('introVideo');
+  const enter   = document.getElementById('introEnter');
+  const skip    = document.getElementById('introSkip');
+
+  if(!overlay || !video || !enter) return;
+
+  function showIntro(){
+    // mostrar SIEMPRE
+    overlay.hidden = false;
+    overlay.classList.remove('hide');
+    overlay.setAttribute('aria-hidden','false');
+
+    try{
+      video.currentTime = 0;
+      const p = video.play();
+      if(p && p.catch) p.catch(()=>{});
+    }catch(e){}
+  }
+
+  function closeIntro(){
+    overlay.classList.add('hide');
+    overlay.setAttribute('aria-hidden','true');
+
+    try{ video.pause(); }catch(e){}
+
+    setTimeout(()=>{
+      // lo sacamos para que no bloquee clicks
+      try{ overlay.remove(); }catch(e){}
+    }, 350);
+  }
+
+  enter.addEventListener('click', closeIntro);
+  skip && skip.addEventListener('click', closeIntro);
+  video.addEventListener('ended', closeIntro);
+
+  // Siempre al cargar
+  showIntro();
+})();
+
 </script>
 
 </body>
